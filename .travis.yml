@@ -1,0 +1,6 @@
+language: bash
+
+sudo: false
+
+script:
+  - bash SOURCES/7zcat -h
