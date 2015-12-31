@@ -92,11 +92,11 @@ main() {
   fi
 
   if [[ $has_errors ]] ; then
-    show "TEST FAILED" $CL_GREEN
+    show "TEST FAILED" $RED
     exit 1
   fi
 
-  show "TEST PASSED" $CL_GREEN
+  show "TEST PASSED" $GREEN
 
   exit 0
 }
