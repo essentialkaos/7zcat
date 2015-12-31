@@ -1,0 +1,304 @@
+#!/usr/bin/env bash
+
+APP="7zcat"
+VER="1.1.0"
+
+########################################################################################
+
+NORM=0
+BOLD=1
+UNLN=4
+RED=31
+GREEN=32
+BROWN=33
+BLUE=34
+MAG=35
+CYAN=36
+GREY=37
+
+CL_NORM="\e[${NORM}m"
+CL_BOLD="\e[${BOLD}m"
+CL_UNLN="\e[${UNLN}m"
+CL_RED="\e[${RED}m"
+CL_GREEN="\e[${GREEN}m"
+CL_BROWN="\e[${BROWN}m"
+CL_BLUE="\e[${BLUE}m"
+CL_MAG="\e[${MAG}m"
+CL_CYAN="\e[${CYAN}m"
+CL_GREY="\e[${GREY}m"
+CL_BL_RED="\e[${RED};1m"
+CL_BL_GREEN="\e[${GREEN};1m"
+CL_BL_BROWN="\e[${BROWN};1m"
+CL_BL_BLUE="\e[${BLUE};1m"
+CL_BL_MAG="\e[${MAG};1m"
+CL_BL_CYAN="\e[${CYAN};1m"
+CL_BL_GREY="\e[${GREY};1m"
+CL_UL_RED="\e[${RED};4m"
+CL_UL_GREEN="\e[${GREEN};4m"
+CL_UL_BROWN="\e[${BROWN};4m"
+CL_UL_BLUE="\e[${BLUE};4m"
+CL_UL_MAG="\e[${MAG};4m"
+CL_UL_CYAN="\e[${CYAN};4m"
+CL_UL_GREY="\e[${GREY};4m"
+CL_BG_RED="\e[${RED};7m"
+CL_BG_GREEN="\e[${GREEN};7m"
+CL_BG_BROWN="\e[${BROWN};7m"
+CL_BG_BLUE="\e[${BLUE};7m"
+CL_BG_MAG="\e[${MAG};7m"
+CL_BG_CYAN="\e[${CYAN};7m"
+CL_BG_GREY="\e[${GREY};7m"
+
+########################################################################################
+
+SUPPORTED_ARGS="pass password !help !usage !version !ver"
+SHORT_ARGS="p:password h:!help v:!version"
+
+########################################################################################
+
+main() {
+  if [[ -n "$ver" || -n "$version" ]] ; then
+    about
+    exit 0
+  fi
+
+  if [[ -n "$help" || -n "$usage" || $# -eq 0 ]] ; then
+    usage
+    exit 0
+  fi
+
+  if [[ ! $(type -P 7za) ]] ; then
+    show "Error! 7zip not installed." $RED
+    exit 1
+  fi
+
+  [[ -n "$pass" ]] && password="$pass"
+  [[ "$password" == "true" ]] && readUserPassword
+
+  local file
+
+  for file in $* ; do
+    local file_name=$(basename "$file")
+
+    if [[ ! -f $file ]] ; then
+      show "Error! $file_name is not a file." $RED
+      continue
+    elif [[ ! -r $file ]]; then
+      show "Error! $file_name is not a readable file." $RED
+      continue
+    fi
+
+    if ! is7zArch "$file" ; then
+      show "Error! $file_name is not a 7z archive." $RED
+      continue
+    fi
+
+    if isProtectedArch "$file" && [[ -z "$password" ]] ; then
+      readUserPassword "$file"
+    fi
+
+    if [[ -n "$password" ]] ; then
+      7za e -p"${password}" -so -bd "$file" 2> /dev/null
+
+      if [[ $? -eq 2 ]] ; then
+        show "Error! Wrong password." $RED
+      fi
+    else
+      7za e -so -bd "$file" 2> /dev/null
+    fi
+  done
+}
+
+readUserPassword() {
+  local file_name=$(basename "$1")
+
+  while : ; do
+    if [[ -n "$file_name" ]] ; then
+      show "Please enter password for $file_name:" $CYAN
+    else
+      show "Please enter password:" $CYAN
+    fi
+
+    read -e -p "> " user_pass
+
+    clnPassInput ${#user_pass}
+
+    show ""
+
+    if [[ -z "$user_pass" ]] ; then
+      show "Password can't be empty." $BROWN
+    else
+      password="$user_pass"
+      break
+    fi
+  done
+}
+
+is7zArch() {
+  7za l "$1" &> /dev/null
+  return $?
+}
+
+isProtectedArch() {
+  if [[ $(7za l "$1" | grep AES) != "" ]] ; then
+    return 0
+  else
+    return 1
+  fi
+}
+
+clnPassInput() {
+  local i result
+
+  result="${result}> "
+
+  for i in $(seq 1 $1) ; do
+    result="${result}*"
+  done
+
+  printf "\e[1A%s\n" "$result"
+}
+
+########################################################################################
+
+show() {
+  if [[ -n "$2" ]] ; then
+    echo -e "\e[${2}m${1}${CL_NORM}"
+  else
+    echo -e "$@"
+  fi
+}
+
+usage() {
+  show ""
+  show "${CL_BOLD}Usage:${CL_NORM} 7zcat ${CL_GREEN}options${CL_NORM} file..."
+  show ""
+  show "Options" $BOLD
+  show ""
+  show "  ${CL_GREEN}--password, -p${CL_NORM} ${CL_GREY}pass${CL_NORM}      Use password for unpacking archives"
+  show "  ${CL_GREEN}--help, -h${CL_NORM}               Show this help message"
+  show "  ${CL_GREEN}--version, -v${CL_NORM}            Show information about version"
+  show ""
+  show "Examples" $BOLD
+  show ""
+  show "  7zcat file.7z"
+  show "  Show content of file.7z" $GREY
+  show ""
+  show "  7zcat -p test1234 protected-file.7z"
+  show "  Show content of password protected file" $GREY
+  show ""
+}
+
+about() {
+  show ""
+  show "${CL_BL_CYAN}$APP${CL_NORM} ${CL_CYAN}$VER${CL_NORM} - Utility for output data in 7z archive to stdout"
+  show ""
+  show "Copyright (C) 2009-2015 ESSENTIAL KAOS" $BOLD
+  show "Essential Kaos Open Source License <http://essentialkaos.com/ekol?en>" $BOLD
+  show ""
+}
+
+showArgWarn() {
+  show "Unknown argument $1." $RED
+  exit 1
+}
+
+## ARGUMENTS PARSING 2 #################################################################
+
+[[ $# -eq 0 ]] && main && exit $?
+
+unset arg argn argm argv argt argk
+
+argv="$*" ; argt=""
+
+while [[ -n "$1" ]] ; do
+  if [[ "$1" =~ \  && -n "$argn" ]] ; then
+    declare $argn="$1"
+
+    unset argn && shift && continue
+  elif [[ $1 =~ ^-{1}[a-zA-Z0-9]{1,2}+.*$ ]] ; then
+    argm=${1:1}
+
+    if [[ \ $SHORT_ARGS\  =~ \ $argm:!?([a-zA-Z0-9_]*) ]] ; then
+      arg="${BASH_REMATCH[1]}"
+    else
+      showArgWarn "-$argm" 2> /dev/null || :
+      shift && continue
+    fi
+
+    if [[ -z "$argn" ]] ; then
+      argn=$arg
+    else
+      [[ -z "$argk" ]] && ( showArgValWarn "--$argn" 2> /dev/null || : ) || declare $argn=true
+      argn=$arg
+    fi
+
+    if [[ ! $SUPPORTED_ARGS\  =~ !?$argn\  ]] ; then
+      showArgWarn "-$argm" 2> /dev/null || :
+      shift && continue
+    fi
+
+    if [[ ${BASH_REMATCH[0]:0:1} == "!" ]] ; then
+      declare $argn=true ; unset argn ; argk=true
+    else
+      unset argk
+    fi
+
+    shift && continue
+  elif [[ "$1" =~ ^-{2}[a-zA-Z]{1}[a-zA-Z0-9_-]+.*$ ]] ; then
+    arg=${1:2}
+
+    if [[ $arg == *=* ]] ; then
+      IFS="=" read -ra arg <<< "$arg"
+
+      argm="${arg[0]}" ; argm=${argm//-/_}
+
+      if [[ ! $SUPPORTED_ARGS\  =~ $argm\  ]] ; then
+        showArgWarn "--${arg[0]//_/-}" 2> /dev/null || :
+        shift && continue
+      fi
+
+      [[ -n "${!argm}" && $MERGEABLE_ARGS\  =~ $argm\  ]] && declare $argm="${!argm} ${arg[@]:1:99}" || declare $argm="${arg[@]:1:99}"
+
+      unset argm && shift && continue
+    else
+      arg=${arg//-/_}
+
+      if [[ -z "$argn" ]] ; then
+        argn=$arg
+      else
+        [[ -z "$argk" ]] && ( showArgValWarn "--$argn" 2> /dev/null || : ) || declare $argn=true
+        argn=$arg
+      fi
+
+      if [[ ! $SUPPORTED_ARGS\  =~ !?$argn\  ]] ; then
+        showArgWarn "--${argn//_/-}" 2> /dev/null || :
+        shift && continue
+      fi
+
+      if [[ ${BASH_REMATCH[0]:0:1} == "!" ]] ; then
+        declare $argn=true ; unset argn ; argk=true
+      else
+        unset argk
+      fi
+
+      shift && continue
+    fi
+  else
+    if [[ -n "$argn" ]] ; then
+      [[ -n "${!argn}" && $MERGEABLE_ARGS\  =~ $argn\  ]] && declare $argn="${!argn} $1" || declare $argn="$1"
+
+      unset argn && shift && continue
+    fi
+  fi
+
+  argt="$argt $1" ; shift
+
+done
+
+[[ -n "$argn" ]] && declare $argn=true
+
+unset arg argn argm argk
+
+[[ -n "$KEEP_ARGS" ]] && main $argv || main ${argt:1:9999}
+
+########################################################################################
