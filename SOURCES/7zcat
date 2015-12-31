@@ -56,11 +56,6 @@ SHORT_ARGS="p:password h:!help v:!version"
 ########################################################################################
 
 main() {
-  if [[ ! $(type -P 7za) ]] ; then
-    show "Error! 7zip not installed." $RED
-    exit 1
-  fi
-
   if [[ -n "$ver" || -n "$version" ]] ; then
     about
     exit 0
@@ -69,6 +64,11 @@ main() {
   if [[ -n "$help" || -n "$usage" || $# -eq 0 ]] ; then
     usage
     exit 0
+  fi
+
+  if [[ ! $(type -P 7za) ]] ; then
+    show "Error! 7zip not installed." $RED
+    exit 1
   fi
 
   [[ -n "$pass" ]] && password="$pass"
