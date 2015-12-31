@@ -75,23 +75,28 @@ main() {
 
   local has_errors=""
 
+  show ""
+
   if [[ "$comp_hash" == "$base_hash" ]] ; then
-    show "Passwordless 7z file: ${CL_GREEN}OK${CL_NORM}"
+    show "Passwordless 7z file:       ${CL_GREEN}OK${CL_NORM}"
   else
-    show "Passwordless 7z file: ${CL_RED}ERROR${CL_NORM} ($base_hash ≠ $comp_hash)"
-    has_errors = true
+    show "Passwordless 7z file:       ${CL_RED}ERROR${CL_NORM} ($base_hash ≠ $comp_hash)"
+    has_errors=true
   fi
 
   if [[ "$comp_hash" == "$base_hash" ]] ; then
     show "Password protected 7z file: ${CL_GREEN}OK${CL_NORM}"
   else
     show "Password protected 7z file: ${CL_RED}ERROR${CL_NORM} ($base_hash ≠ $comp_hash)"
-    has_errors = true
+    has_errors=true
   fi
 
   if [[ $has_errors ]] ; then
+    show "TEST FAILED" $CL_GREEN
     exit 1
   fi
+
+  show "TEST PASSED" $CL_GREEN
 
   exit 0
 }
