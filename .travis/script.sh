@@ -91,6 +91,8 @@ main() {
     has_errors=true
   fi
 
+  show ""
+
   if [[ $has_errors ]] ; then
     show "TEST FAILED" $RED
     exit 1
