@@ -101,12 +101,9 @@ main() {
 
       if [[ $? -eq 2 ]] ; then
         show "Error! Wrong password." $RED
-      else
-        show ""
       fi
     else
       7za e -so -bd "$file" 2> /dev/null
-      show ""
     fi
   done
 }
