@@ -2,5 +2,10 @@ language: bash
 
 sudo: false
 
+addons:
+  apt:
+    packages:
+    - p7zip-full
+
 script:
   - bash .travis/script.sh

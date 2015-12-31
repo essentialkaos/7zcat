@@ -53,6 +53,9 @@ PASSWORD="test"
 # Path to dir with test data
 DATA_DIR=".travis/data"
 
+# Path to 7zcat script
+Z7CAT="../SOURCES/7zcat"
+
 ########################################################################################
 
 # Main func
@@ -67,8 +70,8 @@ main() {
   local pswd_file="$DATA_DIR/test-pswd.7z"
 
   local base_hash=$(cat "$base_file" | sha256sum | cut -f1 -d" ")
-  local comp_hash=$(./7zcat $comp_file | sha256sum | cut -f1 -d" ")
-  local pswd_hash=$(./7zcat -p $PASSWORD $comp_file | sha256sum | cut -f1 -d" ")
+  local comp_hash=$(. $Z7CAT $comp_file | sha256sum | cut -f1 -d" ")
+  local pswd_hash=$(. $Z7CAT -p $PASSWORD $comp_file | sha256sum | cut -f1 -d" ")
 
   local has_errors=""
 
