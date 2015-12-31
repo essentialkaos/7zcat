@@ -54,7 +54,7 @@ PASSWORD="test"
 DATA_DIR=".travis/data"
 
 # Path to 7zcat script
-Z7CAT="../SOURCES/7zcat"
+Z7CAT="SOURCES/7zcat"
 
 ########################################################################################
 
