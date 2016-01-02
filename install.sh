@@ -193,7 +193,7 @@ requireRPM() {
   rpm -q $package &> /dev/null
 
   if [[ $? -ne 0 ]] ; then
-    warn "This app require package $package please install it first"
+    warn "This app require package $package, please install it first"
     requireFailed=true
   fi
 }
@@ -214,7 +214,7 @@ requireDEB() {
   dpkg -s $package &> /dev/null
 
   if [[ $? -ne 0 ]] ; then
-    warn "This app require package $package please install it first"
+    warn "This app require package $package, please install it first"
     requireFailed=true
   fi
 }
