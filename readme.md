@@ -19,7 +19,7 @@ We provide simple bash script `script.sh` for installing app from the sources.
 ... 7zip
 
 git clone https://github.com/essentialkaos/7zcat.git
-cd 7cat
+cd 7zcat
 git checkout v1.1.0
 
 ./install.sh
