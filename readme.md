@@ -22,13 +22,13 @@ git clone https://github.com/essentialkaos/7zcat.git
 cd 7zcat
 git checkout v1.1.0
 
-./install.sh
+sudo ./install.sh
 ```
 
 If you have some issues with installing, try to use script in debug mode:
 
 ```
-./install.sh --debug
+sudo ./install.sh --debug
 ```
 
 #### Usage
