@@ -16,7 +16,7 @@ yum install 7zcat
 We provide simple bash script `script.sh` for installing app from the sources.
 
 ```
-... 7zip
+... install 7zip
 
 git clone https://github.com/essentialkaos/7zcat.git
 cd 7zcat
