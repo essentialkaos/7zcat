@@ -2,7 +2,7 @@
 
 Summary:         Utility for uncompressing data from 7z archive to stdout
 Name:            7zcat
-Version:         1.1.0
+Version:         1.1.1
 Release:         0%{?dist}
 Group:           Applications/System
 License:         EKOL
@@ -47,6 +47,9 @@ rm -rf %{buildroot}
 ###############################################################################
 
 %changelog
+* Fri Mar 18 2016 Anton Novojilov <andy@essentialkaos.com> - 1.1.1-0
+- Fixed bug with checking protected files
+
 * Thu Dec 31 2015 Anton Novojilov <andy@essentialkaos.com> - 1.1.0-0
 - Minor improvements
 

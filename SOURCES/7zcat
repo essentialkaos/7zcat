@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 APP="7zcat"
-VER="1.1.0"
+VER="1.1.1"
 
 ########################################################################################
 
@@ -139,7 +139,7 @@ is7zArch() {
 }
 
 isProtectedArch() {
-  if [[ $(7za l "$1" | grep AES) != "" ]] ; then
+  if [[ $(7za l "$1" | grep "7zAES") != "" ]] ; then
     return 0
   else
     return 1
