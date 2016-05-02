@@ -8,7 +8,7 @@ addons:
     - p7zip-full
 
 before_script:
-  - 7za -h | tail -4
+  - 7za -h
 
 script:
   - bash .travis/script.sh
