@@ -294,7 +294,7 @@ detectOs() {
 
   if [[ "$os_name" == "SunOS" ]] ; then
     os_name=$OS_SOLARIS
-  elif [[ "$os_name" == "Darwon" ]]; then
+  elif [[ "$os_name" == "Darwin" ]]; then
     os_name=$OS_MACOSX
   elif [[ "$os_name" == "Linux" ]] ; then
     os_name="$OS_LINUX"
