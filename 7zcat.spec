@@ -6,8 +6,7 @@ Version:         1.1.2
 Release:         0%{?dist}
 Group:           Applications/System
 License:         EKOL
-URL:             https://essentialkaos.com
-Vendor:          ESSENTIAL KAOS
+URL:             https://github.com/essentialkaos/7zcat
 
 Source0:         https://source.kaos.io/%{name}/%{name}-%{version}.tar.bz2
 

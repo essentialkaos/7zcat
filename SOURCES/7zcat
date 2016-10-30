@@ -216,7 +216,7 @@ about() {
   show "${CL_BL_CYAN}$APP${CL_NORM} ${CL_CYAN}$VER${CL_NORM} - Utility for output data in 7z archive to stdout"
   show ""
   show "Copyright (C) 2009-2016 ESSENTIAL KAOS" $DARK
-  show "Essential Kaos Open Source License <http://essentialkaos.com/ekol?en>" $DARK
+  show "Essential Kaos Open Source License <http://essentialkaos.com/ekol>" $DARK
   show ""
 }
 
