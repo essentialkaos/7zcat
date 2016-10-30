@@ -33,11 +33,12 @@ sudo ./install.sh --debug
 #### Usage
 
 ```
-Usage: 7zcat options file...
+Usage: 7zcat {options} file...
 
 Options
 
   --password, -p pass      Use password for unpacking archives
+  --no-color, -nc          Disable colors in output
   --help, -h               Show this help message
   --version, -v            Show information about version
 

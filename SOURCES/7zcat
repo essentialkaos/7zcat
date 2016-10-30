@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 
+########################################################################################
+
 APP="7zcat"
-VER="1.1.1"
+VER="1.1.2"
 
 ########################################################################################
 
@@ -15,6 +17,7 @@ BLUE=34
 MAG=35
 CYAN=36
 GREY=37
+DARK=90
 
 CL_NORM="\e[${NORM}m"
 CL_BOLD="\e[${BOLD}m"
@@ -26,6 +29,7 @@ CL_BLUE="\e[${BLUE}m"
 CL_MAG="\e[${MAG}m"
 CL_CYAN="\e[${CYAN}m"
 CL_GREY="\e[${GREY}m"
+CL_DARK="\e[${DARK}m"
 CL_BL_RED="\e[${RED};1m"
 CL_BL_GREEN="\e[${GREEN};1m"
 CL_BL_BROWN="\e[${BROWN};1m"
@@ -33,6 +37,7 @@ CL_BL_BLUE="\e[${BLUE};1m"
 CL_BL_MAG="\e[${MAG};1m"
 CL_BL_CYAN="\e[${CYAN};1m"
 CL_BL_GREY="\e[${GREY};1m"
+CL_BL_DARK="\e[${DARK};1m"
 CL_UL_RED="\e[${RED};4m"
 CL_UL_GREEN="\e[${GREEN};4m"
 CL_UL_BROWN="\e[${BROWN};4m"
@@ -40,6 +45,7 @@ CL_UL_BLUE="\e[${BLUE};4m"
 CL_UL_MAG="\e[${MAG};4m"
 CL_UL_CYAN="\e[${CYAN};4m"
 CL_UL_GREY="\e[${GREY};4m"
+CL_UL_DARK="\e[${DARK};4m"
 CL_BG_RED="\e[${RED};7m"
 CL_BG_GREEN="\e[${GREEN};7m"
 CL_BG_BROWN="\e[${BROWN};7m"
@@ -47,15 +53,24 @@ CL_BG_BLUE="\e[${BLUE};7m"
 CL_BG_MAG="\e[${MAG};7m"
 CL_BG_CYAN="\e[${CYAN};7m"
 CL_BG_GREY="\e[${GREY};7m"
+CL_BG_DARK="\e[${DARK};7m"
 
 ########################################################################################
 
-SUPPORTED_ARGS="pass password !help !usage !version !ver"
-SHORT_ARGS="p:password h:!help v:!version"
+SUPPORTED_ARGS="pass password !no_colors !help !usage !version !ver"
+SHORT_ARGS="p:password nc:!no_colors h:!help v:!version"
 
 ########################################################################################
 
 main() {
+  if [[ ! -t 1 || -n "$no_colors" ]] ; then
+    unset NORM BOLD UNLN RED GREEN BROWN BLUE MAG CYAN GREY DARK
+    unset CL_NORM CL_BOLD CL_UNLN CL_RED CL_GREEN CL_BROWN CL_BLUE CL_MAG CL_CYAN CL_GREY CL_DARK
+    unset CL_BL_RED CL_BL_GREEN CL_BL_BROWN CL_BL_BLUE CL_BL_MAG CL_BL_CYAN CL_BL_GREY CL_BL_DARK
+    unset CL_UL_RED CL_UL_GREEN CL_UL_BROWN CL_UL_BLUE CL_UL_MAG CL_UL_CYAN CL_UL_GREY CL_UL_DARK
+    unset CL_BG_RED CL_BG_GREEN CL_BG_BROWN CL_BG_BLUE CL_BG_MAG CL_BG_CYAN CL_BG_GREY CL_BG_DARK
+  fi
+
   if [[ -n "$ver" || -n "$version" ]] ; then
     about
     exit 0
@@ -161,30 +176,38 @@ clnPassInput() {
 ########################################################################################
 
 show() {
-  if [[ -n "$2" ]] ; then
-    echo -e "\e[${2}m${1}${CL_NORM}"
+  if [[ -n "$2" && -z "$no_colors" ]] ; then
+    echo -e "\e[${2}m${1}\e[0m"
   else
-    echo -e "$@"
+    echo -e "$1"
   fi
 }
 
 usage() {
   show ""
-  show "${CL_BOLD}Usage:${CL_NORM} 7zcat ${CL_GREEN}options${CL_NORM} file..."
+  show "${CL_BOLD}Usage:${CL_NORM} 7zcat ${CL_GREEN}{options}${CL_NORM} file..."
   show ""
   show "Options" $BOLD
   show ""
-  show "  ${CL_GREEN}--password, -p${CL_NORM} ${CL_GREY}pass${CL_NORM}      Use password for unpacking archives"
-  show "  ${CL_GREEN}--help, -h${CL_NORM}               Show this help message"
-  show "  ${CL_GREEN}--version, -v${CL_NORM}            Show information about version"
+  if [[ -n "$DARK" ]] ; then
+    show "  ${CL_GREEN}--password, -p${CL_NORM} ${CL_GREY}pass${CL_NORM} ${CL_DARK}....${CL_NORM} Use password for unpacking archives"
+    show "  ${CL_GREEN}--no-color, -nc${CL_NORM} ${CL_DARK}........${CL_NORM} Disable colors in output"
+    show "  ${CL_GREEN}--help, -h${CL_NORM} ${CL_DARK}.............${CL_NORM} Show this help message"
+    show "  ${CL_GREEN}--version, -v${CL_NORM} ${CL_DARK}..........${CL_NORM} Show information about version"
+  else
+    show "  ${CL_GREEN}--password, -p${CL_NORM} ${CL_GREY}pass${CL_NORM}      Use password for unpacking archives"
+    show "  ${CL_GREEN}--no-color, -nc${CL_NORM}          Disable colors in output"
+    show "  ${CL_GREEN}--help, -h${CL_NORM}               Show this help message"
+    show "  ${CL_GREEN}--version, -v${CL_NORM}            Show information about version"
+  fi
   show ""
   show "Examples" $BOLD
   show ""
   show "  7zcat file.7z"
-  show "  Show content of file.7z" $GREY
+  show "  Show content of file.7z" $DARK
   show ""
   show "  7zcat -p test1234 protected-file.7z"
-  show "  Show content of password protected file" $GREY
+  show "  Show content of password protected file" $DARK
   show ""
 }
 
@@ -192,8 +215,8 @@ about() {
   show ""
   show "${CL_BL_CYAN}$APP${CL_NORM} ${CL_CYAN}$VER${CL_NORM} - Utility for output data in 7z archive to stdout"
   show ""
-  show "Copyright (C) 2009-2015 ESSENTIAL KAOS" $BOLD
-  show "Essential Kaos Open Source License <http://essentialkaos.com/ekol?en>" $BOLD
+  show "Copyright (C) 2009-2016 ESSENTIAL KAOS" $DARK
+  show "Essential Kaos Open Source License <http://essentialkaos.com/ekol>" $DARK
   show ""
 }
 
