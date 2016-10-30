@@ -47,7 +47,7 @@ rm -rf %{buildroot}
 
 %changelog
 * Sun Oct 30 2016 Anton Novojilov <andy@essentialkaos.com> - 1.1.2-0
-- UI
+- UI improvements
 
 * Fri Mar 18 2016 Anton Novojilov <andy@essentialkaos.com> - 1.1.1-0
 - Fixed bug with checking protected files
