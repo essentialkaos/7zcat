@@ -1,5 +1,4 @@
 language: bash
-dist: trusty
 
 sudo: false
 
