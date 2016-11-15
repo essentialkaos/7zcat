@@ -4,6 +4,8 @@ engines:
     checks:
       SC2034:
         enabled: false
+      SC2154:
+        enabled: false
 
 ratings:
    paths:
