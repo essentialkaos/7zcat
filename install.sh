@@ -94,7 +94,7 @@ script_dir=$(dirname "$0")
 # Code: No
 # Echo: No
 main() {
-  pushd $script_dir &> /dev/null
+  pushd "$script_dir" &> /dev/null
 
     detectOs
     doInstall
@@ -190,7 +190,7 @@ requireRPM() {
 
   local package="$1"
 
-  rpm -q $package &> /dev/null
+  rpm -q "$package" &> /dev/null
 
   if [[ $? -ne 0 ]] ; then
     warn "This app require package $package, please install it first"
@@ -211,7 +211,7 @@ requireDEB() {
 
   local package="$1"
 
-  dpkg -s $package &> /dev/null
+  dpkg -s "$package" &> /dev/null
 
   if [[ $? -ne 0 ]] ; then
     warn "This app require package $package, please install it first"
@@ -270,7 +270,7 @@ readAnswer() {
   local defval="$1"
   local answer
 
-  read -e -p "> " answer
+  read -re -p "> " answer
 
   show ""
 
@@ -322,7 +322,7 @@ detectOs() {
 # Code: No
 # Echo: No
 error() {
-  show "$@" $RED
+  show "$*" $RED
 }
 
 # Show warning message
@@ -332,7 +332,7 @@ error() {
 # Code: No
 # Echo: No
 warn() {
-  show "$@" $BROWN
+  show "$*" $BROWN
 }
 
 # Show message
@@ -344,9 +344,9 @@ warn() {
 # Echo: No
 show() {
   if [[ -n "$2" ]] ; then
-    echo -e "\e[${2}m${1}${CL_NORM}"
+    echo -e "\e[${2}m${1}\e[0m"
   else
-    echo -e "$@"
+    echo -e "$*"
   fi
 }
 
@@ -371,7 +371,7 @@ argv="$*" ; argt=""
 
 while [[ -n "$1" ]] ; do
   if [[ "$1" =~ \  && -n "$argn" ]] ; then
-    declare $argn="$1"
+    declare "$argn=$1"
 
     unset argn && shift && continue
   elif [[ $1 =~ ^-{1}[a-zA-Z0-9]{1,2}+.*$ ]] ; then
@@ -387,7 +387,7 @@ while [[ -n "$1" ]] ; do
     if [[ -z "$argn" ]] ; then
       argn=$arg
     else
-      [[ -z "$argk" ]] && ( showArgValWarn "--$argn" 2> /dev/null || : ) || declare $argn=true
+      [[ -z "$argk" ]] && ( showArgValWarn "--$argn" 2> /dev/null || : ) || declare "$argn=true"
       argn=$arg
     fi
 
@@ -397,7 +397,7 @@ while [[ -n "$1" ]] ; do
     fi
 
     if [[ ${BASH_REMATCH[0]:0:1} == "!" ]] ; then
-      declare $argn=true ; unset argn ; argk=true
+      declare "$argn=true" ; unset argn ; argk=true
     else
       unset argk
     fi
@@ -416,7 +416,7 @@ while [[ -n "$1" ]] ; do
         shift && continue
       fi
 
-      [[ -n "${!argm}" && $MERGEABLE_ARGS\  =~ $argm\  ]] && declare $argm="${!argm} ${arg[@]:1:99}" || declare $argm="${arg[@]:1:99}"
+      [[ -n "${!argm}" && $MERGEABLE_ARGS\  =~ $argm\  ]] && declare "$argm=${!argm} ${arg[@]:1:99}" || declare "$argm=${arg[@]:1:99}"
 
       unset argm && shift && continue
     else
@@ -425,7 +425,7 @@ while [[ -n "$1" ]] ; do
       if [[ -z "$argn" ]] ; then
         argn=$arg
       else
-        [[ -z "$argk" ]] && ( showArgValWarn "--$argn" 2> /dev/null || : ) || declare $argn=true
+        [[ -z "$argk" ]] && ( showArgValWarn "--$argn" 2> /dev/null || : ) || declare "$argn=true"
         argn=$arg
       fi
 
@@ -435,7 +435,7 @@ while [[ -n "$1" ]] ; do
       fi
 
       if [[ ${BASH_REMATCH[0]:0:1} == "!" ]] ; then
-        declare $argn=true ; unset argn ; argk=true
+        declare "$argn=true" ; unset argn ; argk=true
       else
         unset argk
       fi
@@ -444,7 +444,7 @@ while [[ -n "$1" ]] ; do
     fi
   else
     if [[ -n "$argn" ]] ; then
-      [[ -n "${!argn}" && $MERGEABLE_ARGS\  =~ $argn\  ]] && declare $argn="${!argn} $1" || declare $argn="$1"
+      [[ -n "${!argn}" && $MERGEABLE_ARGS\  =~ $argn\  ]] && declare "$argn=${!argn} $1" || declare "$argn=$1"
 
       unset argn && shift && continue
     fi
@@ -454,7 +454,7 @@ while [[ -n "$1" ]] ; do
 
 done
 
-[[ -n "$argn" ]] && declare $argn=true
+[[ -n "$argn" ]] && declare "$argn=true"
 
 unset arg argn argm argk
 

@@ -251,6 +251,10 @@ usage() {
   show ""
 }
 
+# Show info about version
+#
+# Code: No
+# Echo: No
 about() {
   show ""
   show "${CL_BL_CYAN}$APP${CL_NORM} ${CL_CYAN}$VER${CL_NORM} - Utility for output data in 7z archive to stdout"
@@ -260,6 +264,13 @@ about() {
   show ""
 }
 
+
+# Show warning message about unsupported argument
+#
+# 1: Argument name (String)
+#
+# Code: No
+# Echo: No
 showArgWarn() {
   show "Unknown argument $1." $RED
   exit 1
