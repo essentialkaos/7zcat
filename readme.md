@@ -1,4 +1,4 @@
-### 7zcat
+## `7zcat` [![Code Climate](https://codeclimate.com/github/essentialkaos/7zcat/badges/gpa.svg)](https://codeclimate.com/github/essentialkaos/7zcat)
 
 `7zcat` is simple utility for uncompressing 7z files and writing uncompressed data to standart output.
 
@@ -7,8 +7,15 @@
 ###### From ESSENTIAL KAOS Public repo for RHEL6/CentOS6
 
 ```
-yum install -y http://release.yum.kaos.io/i386/kaos-repo-6.8-0.el6.noarch.rpm
-yum install 7zcat
+[sudo] yum install -y https://yum.kaos.io/6/release/i386/kaos-repo-7.0-0.el6.noarch.rpm
+[sudo] yum install 7zcat
+```
+
+###### From ESSENTIAL KAOS Public repo for RHEL7/CentOS7
+
+```
+[sudo] yum install -y https://yum.kaos.io/7/release/x86_64/kaos-repo-7.0-0.el7.noarch.rpm
+[sudo] yum install 7zcat
 ```
 
 ###### Using install.sh
@@ -37,10 +44,10 @@ Usage: 7zcat {options} file...
 
 Options
 
-  --password, -p pass      Use password for unpacking archives
-  --no-color, -nc          Disable colors in output
-  --help, -h               Show this help message
-  --version, -v            Show information about version
+  --password, -p password    Use password for unpacking archives
+  --no-color, -nc            Disable colors in output
+  --help, -h                 Show this help message
+  --version, -v              Show information about version
 
 Examples
 
@@ -49,6 +56,7 @@ Examples
 
   7zcat -p test1234 protected-file.7z
   Show content of password protected file
+
 
 ```
 
