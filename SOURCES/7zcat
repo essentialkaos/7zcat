@@ -123,6 +123,12 @@ main() {
   done
 }
 
+# Read password
+#
+# 1: Path to file (String)
+#
+# Code: No
+# Echo: No
 readUserPassword() {
   local file_name=$(basename "$1")
 
@@ -148,11 +154,23 @@ readUserPassword() {
   done
 }
 
+# Check if given file is 7z archive
+#
+# 1: Path to file (String)
+#
+# Code: Yes
+# Echo: No
 is7zArch() {
   7za l "$1" &> /dev/null
   return $?
 }
 
+# Check if archive use password protection
+#
+# 1: Path to file (String)
+#
+# Code: Yes
+# Echo: No
 isProtectedArch() {
   if [[ $(7za l "$1" | grep "7zAES") != "" ]] ; then
     return 0
@@ -161,6 +179,10 @@ isProtectedArch() {
   fi
 }
 
+# Replace entered password by masking symbols
+#
+# Code: No
+# Echo: No
 clnPassInput() {
   local i result
 
@@ -175,6 +197,13 @@ clnPassInput() {
 
 ########################################################################################
 
+# Show message
+#
+# 1: Message (String)
+# 2: Message color (Number) [Optional]
+#
+# Code: No
+# Echo: No
 show() {
   if [[ -n "$2" && -z "$no_colors" ]] ; then
     echo -e "\e[${2}m${1}\e[0m"
@@ -183,6 +212,10 @@ show() {
   fi
 }
 
+# Print usage info
+#
+# Code: No
+# Echo: No
 usage() {
   show ""
   show "${CL_BOLD}Usage:${CL_NORM} 7zcat ${CL_GREEN}{options}${CL_NORM} file..."

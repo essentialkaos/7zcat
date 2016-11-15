@@ -1,4 +1,5 @@
 language: bash
+dist: trusty
 
 sudo: false
 
@@ -6,9 +7,6 @@ addons:
   apt:
     packages:
     - p7zip-full
-
-before_script:
-  - 7za -h
 
 script:
   - bash .travis/script.sh
