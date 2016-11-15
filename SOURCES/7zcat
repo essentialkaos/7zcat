@@ -89,10 +89,10 @@ main() {
   [[ -n "$pass" ]] && password="$pass"
   [[ "$password" == "true" ]] && readUserPassword
 
-  local file
+  local file file_name
 
-  for file in $* ; do
-    local file_name=$(basename "$file")
+  for file in "$@" ; do
+    file_name=$(basename "$file")
 
     if [[ ! -f $file ]] ; then
       show "Error! $file_name is not a file." $RED
@@ -139,7 +139,7 @@ readUserPassword() {
       show "Please enter password:" $CYAN
     fi
 
-    read -e -p "> " user_pass
+    read -e -p -r "> " user_pass
 
     clnPassInput ${#user_pass}
 
@@ -188,7 +188,7 @@ clnPassInput() {
 
   result="${result}> "
 
-  for i in $(seq 1 $1) ; do
+  for i in $(seq 1 "$1") ; do
     result="${result}*"
   done
 
