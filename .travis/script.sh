@@ -75,19 +75,21 @@ main() {
 
   local has_errors=""
 
+  printInfo
+
   show ""
 
   if [[ "$comp_hash" == "$base_hash" ]] ; then
-    show "Passwordless 7z file:       ${CL_GREEN}OK${CL_NORM}"
+    show "Passwordless 7z file:       ${CL_GREEN}✔ ${CL_NORM}"
   else
-    show "Passwordless 7z file:       ${CL_RED}ERROR${CL_NORM} ($base_hash ≠ $comp_hash)"
+    show "Passwordless 7z file:       ${CL_RED}✘ ${CL_NORM} ($base_hash ≠ $comp_hash)"
     has_errors=true
   fi
 
   if [[ "$comp_hash" == "$base_hash" ]] ; then
-    show "Password protected 7z file: ${CL_GREEN}OK${CL_NORM}"
+    show "Password protected 7z file: ${CL_GREEN}✔ ${CL_NORM}"
   else
-    show "Password protected 7z file: ${CL_RED}ERROR${CL_NORM} ($base_hash ≠ $comp_hash)"
+    show "Password protected 7z file: ${CL_RED}✘ ${CL_NORM} ($base_hash ≠ $comp_hash)"
     has_errors=true
   fi
 
@@ -98,9 +100,22 @@ main() {
     exit 1
   fi
 
-  show "TEST PASSED" $GREEN
+  show "TEST SUCCESSFULLY PASSED" $GREEN
 
   exit 0
+}
+
+# Print system info
+#
+# Code: No
+# Echo: No
+printInfo() {
+  show "\n-- SYSTEM INFO -----------------------------------------------------------------\n"
+
+  uname -a
+  7za | head -4
+
+  show "--------------------------------------------------------------------------------"
 }
 
 # Show message
@@ -112,9 +127,9 @@ main() {
 # Echo: No
 show() {
   if [[ -n "$2" ]] ; then
-    echo -e "\e[${2}m${1}${CL_NORM}"
+    echo -e "\e[${2}m${1}\e[0m"
   else
-    echo -e "$@"
+    echo -e "$*"
   fi
 }
 

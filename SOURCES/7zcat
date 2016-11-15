@@ -3,7 +3,7 @@
 ########################################################################################
 
 APP="7zcat"
-VER="1.1.2"
+VER="1.2.0"
 
 ########################################################################################
 
@@ -89,10 +89,10 @@ main() {
   [[ -n "$pass" ]] && password="$pass"
   [[ "$password" == "true" ]] && readUserPassword
 
-  local file
+  local file file_name has_errors
 
-  for file in $* ; do
-    local file_name=$(basename "$file")
+  for file in "$@" ; do
+    file_name=$(basename "$file")
 
     if [[ ! -f $file ]] ; then
       show "Error! $file_name is not a file." $RED
@@ -116,15 +116,28 @@ main() {
 
       if [[ $? -eq 2 ]] ; then
         show "Error! Wrong password." $RED
+        has_errors=true
       fi
     else
       7za e -so -bd "$file" 2> /dev/null
     fi
   done
+
+  if [[ -n "$has_errors" ]] ; then
+    exit 1
+  fi
 }
 
+# Read password
+#
+# 1: Path to file (String)
+#
+# Code: No
+# Echo: No
 readUserPassword() {
-  local file_name=$(basename "$1")
+  local file_name
+
+  file_name=$(basename "$1")
 
   while : ; do
     if [[ -n "$file_name" ]] ; then
@@ -133,7 +146,7 @@ readUserPassword() {
       show "Please enter password:" $CYAN
     fi
 
-    read -e -p "> " user_pass
+    read -re -p "> " user_pass
 
     clnPassInput ${#user_pass}
 
@@ -148,11 +161,23 @@ readUserPassword() {
   done
 }
 
+# Check if given file is 7z archive
+#
+# 1: Path to file (String)
+#
+# Code: Yes
+# Echo: No
 is7zArch() {
   7za l "$1" &> /dev/null
   return $?
 }
 
+# Check if archive use password protection
+#
+# 1: Path to file (String)
+#
+# Code: Yes
+# Echo: No
 isProtectedArch() {
   if [[ $(7za l "$1" | grep "7zAES") != "" ]] ; then
     return 0
@@ -161,12 +186,16 @@ isProtectedArch() {
   fi
 }
 
+# Replace entered password by masking symbols
+#
+# Code: No
+# Echo: No
 clnPassInput() {
   local i result
 
   result="${result}> "
 
-  for i in $(seq 1 $1) ; do
+  for i in $(seq 1 "$1") ; do
     result="${result}*"
   done
 
@@ -175,14 +204,25 @@ clnPassInput() {
 
 ########################################################################################
 
+# Show message
+#
+# 1: Message (String)
+# 2: Message color (Number) [Optional]
+#
+# Code: No
+# Echo: No
 show() {
   if [[ -n "$2" && -z "$no_colors" ]] ; then
     echo -e "\e[${2}m${1}\e[0m"
   else
-    echo -e "$1"
+    echo -e "$*"
   fi
 }
 
+# Print usage info
+#
+# Code: No
+# Echo: No
 usage() {
   show ""
   show "${CL_BOLD}Usage:${CL_NORM} 7zcat ${CL_GREEN}{options}${CL_NORM} file..."
@@ -190,15 +230,15 @@ usage() {
   show "Options" $BOLD
   show ""
   if [[ -n "$DARK" ]] ; then
-    show "  ${CL_GREEN}--password, -p${CL_NORM} ${CL_GREY}pass${CL_NORM} ${CL_DARK}....${CL_NORM} Use password for unpacking archives"
-    show "  ${CL_GREEN}--no-color, -nc${CL_NORM} ${CL_DARK}........${CL_NORM} Disable colors in output"
-    show "  ${CL_GREEN}--help, -h${CL_NORM} ${CL_DARK}.............${CL_NORM} Show this help message"
-    show "  ${CL_GREEN}--version, -v${CL_NORM} ${CL_DARK}..........${CL_NORM} Show information about version"
+    show "  ${CL_GREEN}--password, -p${CL_NORM} ${CL_GREY}password${CL_NORM} ${CL_DARK}..${CL_NORM} Use password for unpacking archives"
+    show "  ${CL_GREEN}--no-color, -nc${CL_NORM} ${CL_DARK}..........${CL_NORM} Disable colors in output"
+    show "  ${CL_GREEN}--help, -h${CL_NORM} ${CL_DARK}...............${CL_NORM} Show this help message"
+    show "  ${CL_GREEN}--version, -v${CL_NORM} ${CL_DARK}............${CL_NORM} Show information about version"
   else
-    show "  ${CL_GREEN}--password, -p${CL_NORM} ${CL_GREY}pass${CL_NORM}      Use password for unpacking archives"
-    show "  ${CL_GREEN}--no-color, -nc${CL_NORM}          Disable colors in output"
-    show "  ${CL_GREEN}--help, -h${CL_NORM}               Show this help message"
-    show "  ${CL_GREEN}--version, -v${CL_NORM}            Show information about version"
+    show "  ${CL_GREEN}--password, -p${CL_NORM} ${CL_GREY}password${CL_NORM}    Use password for unpacking archives"
+    show "  ${CL_GREEN}--no-color, -nc${CL_NORM}            Disable colors in output"
+    show "  ${CL_GREEN}--help, -h${CL_NORM}                 Show this help message"
+    show "  ${CL_GREEN}--version, -v${CL_NORM}              Show information about version"
   fi
   show ""
   show "Examples" $BOLD
@@ -211,6 +251,10 @@ usage() {
   show ""
 }
 
+# Show info about version
+#
+# Code: No
+# Echo: No
 about() {
   show ""
   show "${CL_BL_CYAN}$APP${CL_NORM} ${CL_CYAN}$VER${CL_NORM} - Utility for output data in 7z archive to stdout"
@@ -220,6 +264,13 @@ about() {
   show ""
 }
 
+
+# Show warning message about unsupported argument
+#
+# 1: Argument name (String)
+#
+# Code: No
+# Echo: No
 showArgWarn() {
   show "Unknown argument $1." $RED
   exit 1
@@ -235,7 +286,7 @@ argv="$*" ; argt=""
 
 while [[ -n "$1" ]] ; do
   if [[ "$1" =~ \  && -n "$argn" ]] ; then
-    declare $argn="$1"
+    declare "$argn=$1"
 
     unset argn && shift && continue
   elif [[ $1 =~ ^-{1}[a-zA-Z0-9]{1,2}+.*$ ]] ; then
@@ -251,7 +302,7 @@ while [[ -n "$1" ]] ; do
     if [[ -z "$argn" ]] ; then
       argn=$arg
     else
-      [[ -z "$argk" ]] && ( showArgValWarn "--$argn" 2> /dev/null || : ) || declare $argn=true
+      [[ -z "$argk" ]] && ( showArgValWarn "--$argn" 2> /dev/null || : ) || declare "$argn=true"
       argn=$arg
     fi
 
@@ -261,7 +312,7 @@ while [[ -n "$1" ]] ; do
     fi
 
     if [[ ${BASH_REMATCH[0]:0:1} == "!" ]] ; then
-      declare $argn=true ; unset argn ; argk=true
+      declare "$argn=true" ; unset argn ; argk=true
     else
       unset argk
     fi
@@ -280,7 +331,7 @@ while [[ -n "$1" ]] ; do
         shift && continue
       fi
 
-      [[ -n "${!argm}" && $MERGEABLE_ARGS\  =~ $argm\  ]] && declare $argm="${!argm} ${arg[@]:1:99}" || declare $argm="${arg[@]:1:99}"
+      [[ -n "${!argm}" && $MERGEABLE_ARGS\  =~ $argm\  ]] && declare "$argm=${!argm} ${arg[@]:1:99}" || declare "$argm=${arg[@]:1:99}"
 
       unset argm && shift && continue
     else
@@ -289,7 +340,7 @@ while [[ -n "$1" ]] ; do
       if [[ -z "$argn" ]] ; then
         argn=$arg
       else
-        [[ -z "$argk" ]] && ( showArgValWarn "--$argn" 2> /dev/null || : ) || declare $argn=true
+        [[ -z "$argk" ]] && ( showArgValWarn "--$argn" 2> /dev/null || : ) || declare "$argn=true"
         argn=$arg
       fi
 
@@ -299,7 +350,7 @@ while [[ -n "$1" ]] ; do
       fi
 
       if [[ ${BASH_REMATCH[0]:0:1} == "!" ]] ; then
-        declare $argn=true ; unset argn ; argk=true
+        declare "$argn=true" ; unset argn ; argk=true
       else
         unset argk
       fi
@@ -308,7 +359,7 @@ while [[ -n "$1" ]] ; do
     fi
   else
     if [[ -n "$argn" ]] ; then
-      [[ -n "${!argn}" && $MERGEABLE_ARGS\  =~ $argn\  ]] && declare $argn="${!argn} $1" || declare $argn="$1"
+      [[ -n "${!argn}" && $MERGEABLE_ARGS\  =~ $argn\  ]] && declare "$argn=${!argn} $1" || declare "$argn=$1"
 
       unset argn && shift && continue
     fi
@@ -318,7 +369,7 @@ while [[ -n "$1" ]] ; do
 
 done
 
-[[ -n "$argn" ]] && declare $argn=true
+[[ -n "$argn" ]] && declare "$argn=true"
 
 unset arg argn argm argk
 
