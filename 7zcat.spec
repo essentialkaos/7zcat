@@ -2,7 +2,7 @@
 
 Summary:         Utility for uncompressing data from 7z archive to stdout
 Name:            7zcat
-Version:         1.1.2
+Version:         1.2.0
 Release:         0%{?dist}
 Group:           Applications/System
 License:         EKOL
@@ -13,7 +13,7 @@ Source0:         https://source.kaos.io/%{name}/%{name}-%{version}.tar.bz2
 BuildArch:       noarch
 BuildRoot:       %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-Requires:        p7zip
+Requires:        p7zip >= 15
 
 Provides:        %{name} = %{version}-%{release}
 
@@ -46,6 +46,9 @@ rm -rf %{buildroot}
 ###############################################################################
 
 %changelog
+* Wed Nov 16 2016 Anton Novojilov <andy@essentialkaos.com> - 1.2.0-0
+- Code refactoring
+
 * Sun Oct 30 2016 Anton Novojilov <andy@essentialkaos.com> - 1.1.2-0
 - UI improvements
 
