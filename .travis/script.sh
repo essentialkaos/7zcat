@@ -75,6 +75,8 @@ main() {
 
   local has_errors=""
 
+  printInfo
+
   show ""
 
   if [[ "$comp_hash" == "$base_hash" ]] ; then
@@ -101,6 +103,21 @@ main() {
   show "TEST PASSED" $GREEN
 
   exit 0
+}
+
+# Print system info
+#
+# Code: No
+# Echo: No
+printInfo() {
+  show "-- SYSTEM INFO -----------------------------------------------------------------"
+  show ""
+
+  uname -a
+  7za | head -4
+
+  show ""
+  show "--------------------------------------------------------------------------------"
 }
 
 # Show message
