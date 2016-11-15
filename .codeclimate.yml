@@ -9,4 +9,7 @@ engines:
 
 ratings:
    paths:
-     - "SOURCES/7zcat"
+     - SOURCES/7zcat
+
+exclude_paths:
+  - .travis/*
