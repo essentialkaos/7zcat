@@ -1,6 +1,19 @@
 #!/usr/bin/env bash
 
 ########################################################################################
+#
+# /$$$$$$ /$$   /$$  /$$$$$$  /$$$$$$$$ /$$$$$$  /$$       /$$       /$$$$$$$$ /$$$$$$$
+#|_  $$_/| $$$ | $$ /$$__  $$|__  $$__//$$__  $$| $$      | $$      | $$_____/| $$__  $$
+#  | $$  | $$$$| $$| $$  \__/   | $$  | $$  \ $$| $$      | $$      | $$      | $$  \ $$
+#  | $$  | $$ $$ $$|  $$$$$$    | $$  | $$$$$$$$| $$      | $$      | $$$$$   | $$$$$$$/
+#  | $$  | $$  $$$$ \____  $$   | $$  | $$__  $$| $$      | $$      | $$__/   | $$__  $$
+#  | $$  | $$\  $$$ /$$  \ $$   | $$  | $$  | $$| $$      | $$      | $$      | $$  \ $$
+# /$$$$$$| $$ \  $$|  $$$$$$/   | $$  | $$  | $$| $$$$$$$$| $$$$$$$$| $$$$$$$$| $$  | $$
+#|______/|__/  \__/ \______/    |__/  |__/  |__/|________/|________/|________/|__/  |__/
+#
+#                            EK UTILITY INSTALLER v1.1.0
+#
+########################################################################################
 
 NORM=0
 BOLD=1
@@ -12,6 +25,7 @@ BLUE=34
 MAG=35
 CYAN=36
 GREY=37
+DARK=90
 
 CL_NORM="\e[${NORM}m"
 CL_BOLD="\e[${BOLD}m"
@@ -23,6 +37,7 @@ CL_BLUE="\e[${BLUE}m"
 CL_MAG="\e[${MAG}m"
 CL_CYAN="\e[${CYAN}m"
 CL_GREY="\e[${GREY}m"
+CL_DARK="\e[${DARK}m"
 CL_BL_RED="\e[${RED};1m"
 CL_BL_GREEN="\e[${GREEN};1m"
 CL_BL_BROWN="\e[${BROWN};1m"
@@ -30,6 +45,7 @@ CL_BL_BLUE="\e[${BLUE};1m"
 CL_BL_MAG="\e[${MAG};1m"
 CL_BL_CYAN="\e[${CYAN};1m"
 CL_BL_GREY="\e[${GREY};1m"
+CL_BL_DARK="\e[${DARK};1m"
 CL_UL_RED="\e[${RED};4m"
 CL_UL_GREEN="\e[${GREEN};4m"
 CL_UL_BROWN="\e[${BROWN};4m"
@@ -37,6 +53,7 @@ CL_UL_BLUE="\e[${BLUE};4m"
 CL_UL_MAG="\e[${MAG};4m"
 CL_UL_CYAN="\e[${CYAN};4m"
 CL_UL_GREY="\e[${GREY};4m"
+CL_UL_DARK="\e[${DARK};4m"
 CL_BG_RED="\e[${RED};7m"
 CL_BG_GREEN="\e[${GREEN};7m"
 CL_BG_BROWN="\e[${BROWN};7m"
@@ -44,6 +61,7 @@ CL_BG_BLUE="\e[${BLUE};7m"
 CL_BG_MAG="\e[${MAG};7m"
 CL_BG_CYAN="\e[${CYAN};7m"
 CL_BG_GREY="\e[${GREY};7m"
+CL_BG_DARK="\e[${DARK};7m"
 
 ########################################################################################
 
@@ -149,7 +167,7 @@ action() {
   else
     $@ &> /dev/null
   fi
-  
+
   if [[ $? -ne 0 ]] ; then
     show "${CL_RED}+${CL_NORM} $desc"
     error "\nError occured with last action. Install process will be interrupted.\n"
@@ -171,7 +189,7 @@ require() {
   case $os_dist in
     "$DIST_FEDORA"|"$DIST_CENTOS"|"$DIST_RHEL") requireRPM "$package" ;;
     "$DIST_UBUNTU"|"$DIST_DEBIAN")              requireDEB "$package" ;;
-    *) 
+    *)
         error "Unsupported platform"
         requireFailed=true
   esac
@@ -184,7 +202,7 @@ require() {
 # Code: No
 # Echo: No
 requireRPM() {
-  if [[ $no_deps ]] ; then
+  if [[ -n "$no_deps" ]] ; then
     return
   fi
 
@@ -205,7 +223,7 @@ requireRPM() {
 # Code: No
 # Echo: No
 requireDEB() {
-  if [[ $no_deps ]] ; then
+  if [[ -n "$no_deps" ]] ; then
     return
   fi
 
@@ -237,8 +255,8 @@ requireRoot() {
 # Code: Yes
 # Echo: No
 confirmInstall() {
-  if [[ $yes ]] ; then
-    show "\nArgument --yes/-y passed to script, install forced\n" $GREY
+  if [[ -n "$yes" ]] ; then
+    show "\nArgument --yes/-y passed to script, install forced\n" $DARK
     return 0
   fi
 
@@ -276,7 +294,7 @@ readAnswer() {
 
   answer=$(echo "$answer" | tr "[:lower:]" "[:upper:]")
 
-  [[ -z $answer ]] && answer="$defval"
+  [[ -z "$answer" ]] && answer="$defval"
 
   if [[ ${answer:0:1} == "Y" ]] ; then
     return 0
