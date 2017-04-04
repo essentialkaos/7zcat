@@ -1,4 +1,4 @@
-## `7zcat` [![Code Climate](https://codeclimate.com/github/essentialkaos/7zcat/badges/gpa.svg)](https://codeclimate.com/github/essentialkaos/7zcat)
+## `7zcat` [![Code Climate](https://codeclimate.com/github/essentialkaos/7zcat/badges/gpa.svg)](https://codeclimate.com/github/essentialkaos/7zcat) [![License](https://gh.kaos.io/ekol.svg)](https://essentialkaos.com/ekol)
 
 `7zcat` is simple utility for uncompressing 7z files and writing uncompressed data to standart output.
 
