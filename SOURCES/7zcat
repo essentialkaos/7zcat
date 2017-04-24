@@ -3,7 +3,7 @@
 ########################################################################################
 
 APP="7zcat"
-VER="1.2.2"
+VER="1.2.3"
 
 ########################################################################################
 
@@ -268,7 +268,7 @@ showArgWarn() {
   exit 1
 }
 
-## ARGUMENTS PARSING 2 #################################################################
+## ARGUMENTS PARSING 3 #################################################################
 
 [[ $# -eq 0 ]] && main && exit $?
 
@@ -287,19 +287,19 @@ while [[ -n "$1" ]] ; do
     if [[ \ $SHORT_ARGS\  =~ \ $argm:!?([a-zA-Z0-9_]*) ]] ; then
       arg="${BASH_REMATCH[1]}"
     else
-      showArgWarn "-$argm" 2> /dev/null || :
+      declare -F showArgWarn &>/dev/null && showArgWarn "-$argm"
       shift && continue
     fi
 
     if [[ -z "$argn" ]] ; then
       argn=$arg
     else
-      [[ -z "$argk" ]] && ( showArgValWarn "--$argn" 2> /dev/null || : ) || declare "$argn=true"
+      [[ -z "$argk" ]] && ( declare -F showArgValWarn &>/dev/null && showArgValWarn "--$argn" ) || declare "$argn=true"
       argn=$arg
     fi
 
     if [[ ! $SUPPORTED_ARGS\  =~ !?$argn\  ]] ; then
-      showArgWarn "-$argm" 2> /dev/null || :
+      declare -F showArgWarn &>/dev/null && showArgWarn "-$argm"
       shift && continue
     fi
 
@@ -319,7 +319,7 @@ while [[ -n "$1" ]] ; do
       argm="${arg[0]}" ; argm=${argm//-/_}
 
       if [[ ! $SUPPORTED_ARGS\  =~ $argm\  ]] ; then
-        showArgWarn "--${arg[0]//_/-}" 2> /dev/null || :
+        declare -F showArgWarn &>/dev/null && showArgWarn "--${arg[0]//_/-}"
         shift && continue
       fi
 
@@ -332,12 +332,12 @@ while [[ -n "$1" ]] ; do
       if [[ -z "$argn" ]] ; then
         argn=$arg
       else
-        [[ -z "$argk" ]] && ( showArgValWarn "--$argn" 2> /dev/null || : ) || declare "$argn=true"
+        [[ -z "$argk" ]] && ( declare -F showArgValWarn &>/dev/null && showArgValWarn "--$argn" ) || declare "$argn=true"
         argn=$arg
       fi
 
       if [[ ! $SUPPORTED_ARGS\  =~ !?$argn\  ]] ; then
-        showArgWarn "--${argn//_/-}" 2> /dev/null || :
+        declare -F showArgWarn &>/dev/null && showArgWarn "--${argn//_/-}"
         shift && continue
       fi
 

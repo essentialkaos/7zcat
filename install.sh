@@ -127,11 +127,11 @@ main() {
 doInstall() {
   requireRoot
 
-  confirmInstall "7ZCat"
+  confirmInstall "mcryptpasswd"
 
   case $os_dist in
-    "$DIST_FEDORA"|"$DIST_CENTOS"|"$DIST_RHEL") requireRPM "p7zip" ;;
-    "$DIST_UBUNTU"|"$DIST_DEBIAN")              requireDEB "p7zip-full" ;;
+    "$DIST_FEDORA"|"$DIST_CENTOS"|"$DIST_RHEL") requireRPM "cracklib" ;;
+    "$DIST_UBUNTU"|"$DIST_DEBIAN")              requireDEB "libpam-cracklib" ;;
     *) error "Unsupported platform" ; requireFailed=true 
   esac
 
@@ -140,12 +140,20 @@ doInstall() {
   fi
 
   action "Copied script to /usr/bib directory" \
-         "cp" "SOURCES/7zcat" "/usr/bin/7zcat"
+         "cp" "SOURCES/mkcryptpasswd" "/usr/bin/mkcryptpasswd"
 
   action "Added +x flag for script" \
-         "chmod" "+x" "/usr/bin/7zcat"
+         "chmod" "+x" "/usr/bin/mkcryptpasswd"
 
-  congratulate "7ZCat"
+  cp SOURCES/mkcryptpasswd.8 .
+
+  action "Created man page" \
+         "gzip" "mkcryptpasswd.8"
+
+  action "Man page moved to man dir" \
+         "mv" "mkcryptpasswd.8.gz" "/usr/share/man/man8/"
+
+  congratulate "mcryptpasswd"
 }
 
 ########################################################################################
