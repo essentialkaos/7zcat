@@ -2,25 +2,25 @@
 
 `7zcat` is simple utility for uncompressing 7z files and writing uncompressed data to standart output.
 
-#### Installation
+### Installation
 
-###### From ESSENTIAL KAOS Public repo for RHEL6/CentOS6
+#### From ESSENTIAL KAOS Public repo for RHEL6/CentOS6
 
 ```
-[sudo] yum install -y https://yum.kaos.io/6/release/i386/kaos-repo-7.0-0.el6.noarch.rpm
+[sudo] yum install -y https://yum.kaos.io/6/release/x86_64/kaos-repo-8.0-0.el6.noarch.rpm
 [sudo] yum install 7zcat
 ```
 
-###### From ESSENTIAL KAOS Public repo for RHEL7/CentOS7
+#### From ESSENTIAL KAOS Public repo for RHEL7/CentOS7
 
 ```
-[sudo] yum install -y https://yum.kaos.io/7/release/x86_64/kaos-repo-7.0-0.el7.noarch.rpm
+[sudo] yum install -y https://yum.kaos.io/7/release/x86_64/kaos-repo-8.0-0.el7.noarch.rpm
 [sudo] yum install 7zcat
 ```
 
-###### Using install.sh
+#### Using `install.sh`
 
-We provide simple bash script `script.sh` for installing app from the sources.
+We provide simple bash script `install.sh` for installing app from the sources.
 
 ```
 ... install 7zip
@@ -37,7 +37,7 @@ If you have some issues with installing, try to use script in debug mode:
 sudo ./install.sh --debug
 ```
 
-#### Usage
+### Usage
 
 ```
 Usage: 7zcat {options} file...
@@ -60,13 +60,13 @@ Examples
 
 ```
 
-#### Build Status
+### Build Status
 
 | Repository | Status |
 |------------|--------|
 | Stable | [![Build Status](https://travis-ci.org/essentialkaos/7zcat.svg?branch=master)](https://travis-ci.org/essentialkaos/7zcat) |
 | Unstable | [![Build Status](https://travis-ci.org/essentialkaos/7zcat.svg?branch=develop)](https://travis-ci.org/essentialkaos/7zcat) |
 
-#### License
+### License
 
 [EKOL](https://essentialkaos.com/ekol)
