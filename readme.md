@@ -57,16 +57,17 @@ Examples
   7zcat -p test1234 protected-file.7z
   Show content of password protected file
 
-
 ```
 
 ### Build Status
 
-| Repository | Status |
-|------------|--------|
-| Stable | [![Build Status](https://travis-ci.org/essentialkaos/7zcat.svg?branch=master)](https://travis-ci.org/essentialkaos/7zcat) |
-| Unstable | [![Build Status](https://travis-ci.org/essentialkaos/7zcat.svg?branch=develop)](https://travis-ci.org/essentialkaos/7zcat) |
+| Branch | Status |
+|--------|--------|
+| `master` | [![Build Status](https://travis-ci.org/essentialkaos/7zcat.svg?branch=master)](https://travis-ci.org/essentialkaos/7zcat) |
+| `develop` | [![Build Status](https://travis-ci.org/essentialkaos/7zcat.svg?branch=develop)](https://travis-ci.org/essentialkaos/7zcat) |
 
 ### License
 
 [EKOL](https://essentialkaos.com/ekol)
+
+<p align="center"><a href="https://essentialkaos.com"><img src="https://gh.kaos.io/ekgh.svg"/></a></p>
