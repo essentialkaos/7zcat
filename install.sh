@@ -11,7 +11,7 @@
 # /$$$$$$| $$ \  $$|  $$$$$$/   | $$  | $$  | $$| $$$$$$$$| $$$$$$$$| $$$$$$$$| $$  | $$
 #|______/|__/  \__/ \______/    |__/  |__/  |__/|________/|________/|________/|__/  |__/
 #
-#                            EK UTILITY INSTALLER v1.1.0
+#                            EK UTILITY INSTALLER v1.1.1
 #
 ########################################################################################
 
@@ -127,11 +127,11 @@ main() {
 doInstall() {
   requireRoot
 
-  confirmInstall "mcryptpasswd"
+  confirmInstall "7ZCat"
 
   case $os_dist in
-    "$DIST_FEDORA"|"$DIST_CENTOS"|"$DIST_RHEL") requireRPM "cracklib" ;;
-    "$DIST_UBUNTU"|"$DIST_DEBIAN")              requireDEB "libpam-cracklib" ;;
+    "$DIST_FEDORA"|"$DIST_CENTOS"|"$DIST_RHEL") requireRPM "p7zip" ;;
+    "$DIST_UBUNTU"|"$DIST_DEBIAN")              requireDEB "p7zip-full" ;;
     *) error "Unsupported platform" ; requireFailed=true 
   esac
 
@@ -140,20 +140,12 @@ doInstall() {
   fi
 
   action "Copied script to /usr/bib directory" \
-         "cp" "SOURCES/mkcryptpasswd" "/usr/bin/mkcryptpasswd"
+         "cp" "SOURCES/7zcat" "/usr/bin/7zcat"
 
   action "Added +x flag for script" \
-         "chmod" "+x" "/usr/bin/mkcryptpasswd"
+         "chmod" "+x" "/usr/bin/7zcat"
 
-  cp SOURCES/mkcryptpasswd.8 .
-
-  action "Created man page" \
-         "gzip" "mkcryptpasswd.8"
-
-  action "Man page moved to man dir" \
-         "mv" "mkcryptpasswd.8.gz" "/usr/share/man/man8/"
-
-  congratulate "mcryptpasswd"
+  congratulate "7ZCat"
 }
 
 ########################################################################################
@@ -178,7 +170,7 @@ action() {
 
   if [[ $? -ne 0 ]] ; then
     show "${CL_RED}+${CL_NORM} $desc"
-    error "\nError occured with last action. Install process will be interrupted.\n"
+    error "\nError occurred with last action. Install process will be interrupted.\n"
     exit 1
   else
     show "${CL_GREEN}+${CL_NORM} $desc"
@@ -245,13 +237,13 @@ requireDEB() {
   fi
 }
 
-# Require root priveleges
+# Require root privileges
 #
 # Code: No
 # Echo: No
 requireRoot() {
   if [[ $(id -u) != "0" ]] ; then
-    error "Superuser priveleges is required for install"
+    error "Superuser privileges is required for install"
     exit 1
   fi
 }
