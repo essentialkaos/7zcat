@@ -47,8 +47,8 @@ rm -rf %{buildroot}
 
 %changelog
 * Tue Oct 17 2017 Anton Novojilov <andy@essentialkaos.com> - 1.3.0-0
-- Using 1 CPU for unpacking by default
-- Added option '-F/--fast' for using all CPUs for unpacking
+- Using 1 CPU by default for unpacking data
+- Added option '-F/--fast' for using all CPUs for unpacking data
 
 * Mon Apr 24 2017 Anton Novojilov <andy@essentialkaos.com> - 1.2.3-0
 - Arguments parser updated to v3 with fixed stderr output redirection for

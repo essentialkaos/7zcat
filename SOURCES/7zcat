@@ -75,7 +75,7 @@ main() {
   options="-so -bd"
 
   if [[ -z "$fast" ]] ; then
-    options="-mmt1 $ops"
+    options="-mmt1 $options"
   fi
 
   for file in "$@" ; do
