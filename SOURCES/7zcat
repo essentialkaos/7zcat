@@ -3,7 +3,7 @@
 ########################################################################################
 
 APP="7zcat"
-VER="1.2.3"
+VER="1.3.0"
 
 ########################################################################################
 
@@ -40,8 +40,8 @@ CL_BL_GREY="\e[1;${GREY};49m"
 
 ########################################################################################
 
-SUPPORTED_ARGS="pass password !no_colors !help !usage !version !ver"
-SHORT_ARGS="p:password nc:!no_colors h:!help v:!version"
+SUPPORTED_ARGS="pass password !fast !no_colors !help !usage !version !ver"
+SHORT_ARGS="p:password F:!fast nc:!no_colors h:!help v:!version"
 
 ########################################################################################
 
@@ -70,7 +70,13 @@ main() {
   [[ -n "$pass" ]] && password="$pass"
   [[ "$password" == "true" ]] && readUserPassword
 
-  local file file_name has_errors
+  local file file_name has_errors options
+
+  options="-so -bd"
+
+  if [[ -z "$fast" ]] ; then
+    options="-mmt1 $options"
+  fi
 
   for file in "$@" ; do
     file_name=$(basename "$file")
@@ -93,14 +99,14 @@ main() {
     fi
 
     if [[ -n "$password" ]] ; then
-      7za e -p"${password}" -so -bd "$file" 2> /dev/null
+      7za e -p"${password}" $options "$file" 2> /dev/null
 
       if [[ $? -eq 2 ]] ; then
         error "Error! Wrong password." $RED
         has_errors=true
       fi
     else
-      7za e -so -bd "$file" 2> /dev/null
+      7za e $options "$file" 2> /dev/null
     fi
   done
 
@@ -223,11 +229,13 @@ usage() {
   show ""
   if [[ -n "$DARK" ]] ; then
     show "  ${CL_GREEN}--password, -p${CL_NORM} ${CL_GREY}password${CL_NORM} ${CL_DARK}..${CL_NORM} Use password for unpacking archives"
+    show "  ${CL_GREEN}--fast, -F${CL_NORM} ${CL_DARK}...............${CL_NORM} Use all CPUs for unpacking data"
     show "  ${CL_GREEN}--no-color, -nc${CL_NORM} ${CL_DARK}..........${CL_NORM} Disable colors in output"
     show "  ${CL_GREEN}--help, -h${CL_NORM} ${CL_DARK}...............${CL_NORM} Show this help message"
     show "  ${CL_GREEN}--version, -v${CL_NORM} ${CL_DARK}............${CL_NORM} Show information about version"
   else
     show "  ${CL_GREEN}--password, -p${CL_NORM} ${CL_GREY}password${CL_NORM}    Use password for unpacking archives"
+    show "  ${CL_GREEN}--fast, -F${CL_NORM}                 Use all CPUs for unpacking data"
     show "  ${CL_GREEN}--no-color, -nc${CL_NORM}            Disable colors in output"
     show "  ${CL_GREEN}--help, -h${CL_NORM}                 Show this help message"
     show "  ${CL_GREEN}--version, -v${CL_NORM}              Show information about version"

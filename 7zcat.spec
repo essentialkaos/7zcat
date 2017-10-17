@@ -2,7 +2,7 @@
 
 Summary:         Utility for uncompressing data from 7z archive to stdout
 Name:            7zcat
-Version:         1.2.3
+Version:         1.3.0
 Release:         0%{?dist}
 Group:           Applications/System
 License:         EKOL
@@ -13,7 +13,7 @@ Source0:         https://source.kaos.io/%{name}/%{name}-%{version}.tar.bz2
 BuildArch:       noarch
 BuildRoot:       %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-Requires:        p7zip >= 15
+Requires:        p7zip >= 16
 
 Provides:        %{name} = %{version}-%{release}
 
@@ -46,6 +46,10 @@ rm -rf %{buildroot}
 ###############################################################################
 
 %changelog
+* Tue Oct 17 2017 Anton Novojilov <andy@essentialkaos.com> - 1.3.0-0
+- Using 1 CPU by default for unpacking data
+- Added option '-F/--fast' for using all CPUs for unpacking data
+
 * Mon Apr 24 2017 Anton Novojilov <andy@essentialkaos.com> - 1.2.3-0
 - Arguments parser updated to v3 with fixed stderr output redirection for
   showArgWarn and showArgValWarn functions
