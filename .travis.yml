@@ -4,14 +4,15 @@ sudo: false
 
 addons:
   apt:
-    sources:
-      - debian-sid
     packages:
       - p7zip-full
-      - shellcheck
+
+before_install:
+  - wget https://storage.googleapis.com/shellcheck/shellcheck-latest.linux.x86_64.tar.xz
+  - tar xf shellcheck-latest.linux.x86_64.tar.xz
 
 script:
-  - bash -c 'shopt -s globstar; shellcheck SOURCES/7zcat'
+  - bash -c 'shopt -s globstar; ./shellcheck/shellcheck SOURCES/7zcat'
   - bash .travis/script.sh
 
 matrix:
