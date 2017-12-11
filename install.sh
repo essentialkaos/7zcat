@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC1117,SC2034,SC2154,SC2181
 
 ########################################################################################
 #
@@ -11,7 +12,7 @@
 # /$$$$$$| $$ \  $$|  $$$$$$/   | $$  | $$  | $$| $$$$$$$$| $$$$$$$$| $$$$$$$$| $$  | $$
 #|______/|__/  \__/ \______/    |__/  |__/  |__/|________/|________/|________/|__/  |__/
 #
-#                            EK UTILITY INSTALLER v1.1.1
+#                            EK UTILITY INSTALLER v1.2.0
 #
 ########################################################################################
 
@@ -112,12 +113,12 @@ script_dir=$(dirname "$0")
 # Code: No
 # Echo: No
 main() {
-  pushd "$script_dir" &> /dev/null
+  cd "$script_dir" &> /dev/null || exit 1
 
     detectOs
     doInstall
 
-  popd &> /dev/null
+  cd - &> /dev/null || exit 1
 }
 
 # Install app
@@ -163,8 +164,10 @@ action() {
   shift 1
 
   if [[ $debug ]] ; then
+    # shellcheck disable=SC2068
     $@
   else
+    # shellcheck disable=SC2068
     $@ &> /dev/null
   fi
 
@@ -379,7 +382,7 @@ showArgWarn() {
   exit 1
 }
 
-## ARGUMENTS PARSING 2 #################################################################
+## ARGUMENTS PARSING 3 #################################################################
 
 [[ $# -eq 0 ]] && main && exit $?
 
@@ -398,19 +401,20 @@ while [[ -n "$1" ]] ; do
     if [[ \ $SHORT_ARGS\  =~ \ $argm:!?([a-zA-Z0-9_]*) ]] ; then
       arg="${BASH_REMATCH[1]}"
     else
-      showArgWarn "-$argm" 2> /dev/null || :
+      declare -F showArgWarn &>/dev/null && showArgWarn "-$argm"
       shift && continue
     fi
 
     if [[ -z "$argn" ]] ; then
       argn=$arg
     else
-      [[ -z "$argk" ]] && ( showArgValWarn "--$argn" 2> /dev/null || : ) || declare "$argn=true"
+      # shellcheck disable=SC2015
+      [[ -z "$argk" ]] && ( declare -F showArgValWarn &>/dev/null && showArgValWarn "--$argn" ) || declare "$argn=true"
       argn=$arg
     fi
 
     if [[ ! $SUPPORTED_ARGS\  =~ !?$argn\  ]] ; then
-      showArgWarn "-$argm" 2> /dev/null || :
+      declare -F showArgWarn &>/dev/null && showArgWarn "-$argm"
       shift && continue
     fi
 
@@ -430,11 +434,12 @@ while [[ -n "$1" ]] ; do
       argm="${arg[0]}" ; argm=${argm//-/_}
 
       if [[ ! $SUPPORTED_ARGS\  =~ $argm\  ]] ; then
-        showArgWarn "--${arg[0]//_/-}" 2> /dev/null || :
+        declare -F showArgWarn &>/dev/null && showArgWarn "--${arg[0]//_/-}"
         shift && continue
       fi
 
-      [[ -n "${!argm}" && $MERGEABLE_ARGS\  =~ $argm\  ]] && declare "$argm=${!argm} ${arg[@]:1:99}" || declare "$argm=${arg[@]:1:99}"
+      # shellcheck disable=SC2015
+      [[ -n "${!argm}" && $MERGEABLE_ARGS\  =~ $argm\  ]] && declare "$argm=${!argm} ${arg[*]:1:99}" || declare "$argm=${arg[*]:1:99}"
 
       unset argm && shift && continue
     else
@@ -443,12 +448,13 @@ while [[ -n "$1" ]] ; do
       if [[ -z "$argn" ]] ; then
         argn=$arg
       else
-        [[ -z "$argk" ]] && ( showArgValWarn "--$argn" 2> /dev/null || : ) || declare "$argn=true"
+        # shellcheck disable=SC2015
+        [[ -z "$argk" ]] && ( declare -F showArgValWarn &>/dev/null && showArgValWarn "--$argn" ) || declare "$argn=true"
         argn=$arg
       fi
 
       if [[ ! $SUPPORTED_ARGS\  =~ !?$argn\  ]] ; then
-        showArgWarn "--${argn//_/-}" 2> /dev/null || :
+        declare -F showArgWarn &>/dev/null && showArgWarn "--${argn//_/-}"
         shift && continue
       fi
 
@@ -462,6 +468,7 @@ while [[ -n "$1" ]] ; do
     fi
   else
     if [[ -n "$argn" ]] ; then
+      # shellcheck disable=SC2015
       [[ -n "${!argn}" && $MERGEABLE_ARGS\  =~ $argn\  ]] && declare "$argn=${!argn} $1" || declare "$argn=$1"
 
       unset argn && shift && continue
@@ -476,6 +483,7 @@ done
 
 unset arg argn argm argk
 
+# shellcheck disable=SC2015,SC2086
 [[ -n "$KEEP_ARGS" ]] && main $argv || main ${argt:1:9999}
 
 ########################################################################################

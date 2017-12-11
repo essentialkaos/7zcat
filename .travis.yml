@@ -12,6 +12,7 @@ before_install:
   - tar xf shellcheck-latest.linux.x86_64.tar.xz
 
 script:
+  - bash -c 'shopt -s globstar; ./shellcheck-latest/shellcheck install.sh'
   - bash -c 'shopt -s globstar; ./shellcheck-latest/shellcheck SOURCES/7zcat'
   - bash .travis/script.sh
 
