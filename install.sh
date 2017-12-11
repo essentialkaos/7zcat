@@ -113,12 +113,12 @@ script_dir=$(dirname "$0")
 # Code: No
 # Echo: No
 main() {
-  cd "$script_dir" &> /dev/null || exit 1
+  pushd "$script_dir" &> /dev/null || exit 1
 
     detectOs
     doInstall
 
-  cd - &> /dev/null || exit 1
+  popd &> /dev/null || exit 1
 }
 
 # Install app
