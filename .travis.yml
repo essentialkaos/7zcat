@@ -4,8 +4,15 @@ sudo: false
 
 addons:
   apt:
+    sources:
+      - debian-sid
     packages:
-    - p7zip-full
+      - p7zip-full
+      - shellcheck
 
 script:
+  - bash -c 'shopt -s globstar; shellcheck SOURCES/7zcat'
   - bash .travis/script.sh
+
+matrix:
+  fast_finish: true
