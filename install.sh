@@ -139,7 +139,7 @@ doInstall() {
     show "" && exit 1
   fi
 
-  action "Copied script to /usr/bib directory" \
+  action "Copied script to /usr/bin directory" \
          "cp" "SOURCES/7zcat" "/usr/bin/7zcat"
 
   action "Added +x flag for script" \
