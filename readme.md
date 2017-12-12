@@ -1,4 +1,4 @@
-## `7zcat` [![License](https://gh.kaos.io/ekol.svg)](https://essentialkaos.com/ekol)
+## `7zcat` [![Build Status](https://travis-ci.org/essentialkaos/7zcat.svg?branch=master)](https://travis-ci.org/essentialkaos/7zcat) [![License](https://gh.kaos.io/ekol.svg)](https://essentialkaos.com/ekol)
 
 `7zcat` is simple utility for uncompressing 7z files and writing uncompressed data to standart output.
 
