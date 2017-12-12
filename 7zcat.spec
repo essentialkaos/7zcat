@@ -2,7 +2,7 @@
 
 Summary:         Utility for uncompressing data from 7z archive to stdout
 Name:            7zcat
-Version:         1.3.0
+Version:         1.3.1
 Release:         0%{?dist}
 Group:           Applications/System
 License:         EKOL
@@ -46,6 +46,9 @@ rm -rf %{buildroot}
 ###############################################################################
 
 %changelog
+* Tue Dec 12 2017 Anton Novojilov <andy@essentialkaos.com> - 1.3.1-0
+- Code refactoring
+
 * Tue Oct 17 2017 Anton Novojilov <andy@essentialkaos.com> - 1.3.0-0
 - Using 1 CPU by default for unpacking data
 - Added option '-F/--fast' for using all CPUs for unpacking data
