@@ -1,4 +1,4 @@
-###############################################################################
+################################################################################
 
 Summary:         Utility for uncompressing data from 7z archive to stdout
 Name:            7zcat
@@ -17,13 +17,13 @@ Requires:        p7zip >= 16
 
 Provides:        %{name} = %{version}-%{release}
 
-###############################################################################
+################################################################################
 
 %description
-Utility for uncompressing 7z files and writing uncompressed data to standart 
+Utility for uncompressing 7z files and writing uncompressed data to standart
 output.
 
-###############################################################################
+################################################################################
 
 %prep
 %setup -q
@@ -43,7 +43,7 @@ rm -rf %{buildroot}
 %doc LICENSE.EN LICENSE.RU
 %{_bindir}/%{name}
 
-###############################################################################
+################################################################################
 
 %changelog
 * Tue Jun 19 2018 Anton Novojilov <andy@essentialkaos.com> - 1.3.2-0
@@ -115,14 +115,14 @@ rm -rf %{buildroot}
 - Improved argument parsing
 - Added short arguments support
 
-* Thu Oct 18 2012 Anton Novojilov <andy@essentialkaos.com> 1.0.4-0
+* Thu Oct 18 2012 Anton Novojilov <andy@essentialkaos.com> - 1.0.4-0
 - Updated information in spec
 
-* Thu Oct 18 2012 Anton Novojilov <andy@essentialkaos.com> 1.0.3-0
+* Thu Oct 18 2012 Anton Novojilov <andy@essentialkaos.com> - 1.0.3-0
 - Changed license to MIT
 
 * Thu Jul 12 2012 Anton Novojilov <andy@essentialkaos.com> - 1.0.2-0
-- Added password support 
+- Added password support
 - Improved argument parsing
 - Minor UI fixes
 
