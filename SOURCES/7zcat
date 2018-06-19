@@ -4,7 +4,7 @@
 ########################################################################################
 
 APP="7zcat"
-VER="1.3.1"
+VER="1.3.2"
 
 ########################################################################################
 
@@ -263,7 +263,7 @@ about() {
   show "${CL_BL_CYAN}$APP${CL_NORM} ${CL_CYAN}$VER${CL_NORM} - Utility for output data in 7z archive to stdout"
   show ""
   show "Copyright (C) 2009-$(date +%Y) ESSENTIAL KAOS" $DARK
-  show "Essential Kaos Open Source License <http://essentialkaos.com/ekol>" $DARK
+  show "Essential Kaos Open Source License <https://essentialkaos.com/ekol>" $DARK
   show ""
 }
 
@@ -279,7 +279,7 @@ showArgWarn() {
   exit 1
 }
 
-## ARGUMENTS PARSING 3 #################################################################
+## ARGUMENTS PARSING 4 #################################################################
 
 [[ $# -eq 0 ]] && main && exit $?
 
@@ -381,6 +381,6 @@ done
 unset arg argn argm argk
 
 # shellcheck disable=SC2015,SC2086
-[[ -n "$KEEP_ARGS" ]] && main $argv || main ${argt:1:9999}
+[[ -n "$KEEP_ARGS" ]] && main $argv || main ${argt:1}
 
 ########################################################################################

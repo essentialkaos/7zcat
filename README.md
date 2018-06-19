@@ -1,4 +1,11 @@
-## `7zcat` [![Build Status](https://travis-ci.org/essentialkaos/7zcat.svg?branch=master)](https://travis-ci.org/essentialkaos/7zcat) [![License](https://gh.kaos.io/ekol.svg)](https://essentialkaos.com/ekol)
+<p align="center"><a href="#readme"><img src="https://gh.kaos.st/7zcat.svg"/></a></p>
+
+<p align="center"><a href="#installation">Installation</a> • <a href="#usage">Usage</a> • <a href="#build-status">Build Status</a> • <a href="#license">License</a></p>
+
+<p align="center">
+  <a href="https://travis-ci.org/essentialkaos/7zcat"><img src="https://travis-ci.org/essentialkaos/7zcat.svg"></a>
+  <a href="https://essentialkaos.com/ekol"><img src="https://gh.kaos.st/ekol.svg"></a>
+</p>
 
 `7zcat` is simple utility for uncompressing 7z files and writing uncompressed data to standart output.
 
@@ -7,14 +14,14 @@
 #### From ESSENTIAL KAOS Public repo for RHEL6/CentOS6
 
 ```
-[sudo] yum install -y https://yum.kaos.io/6/release/x86_64/kaos-repo-8.0-0.el6.noarch.rpm
+[sudo] yum install -y https://yum.kaos.st/6/release/x86_64/kaos-repo-9.1-0.el6.noarch.rpm
 [sudo] yum install 7zcat
 ```
 
 #### From ESSENTIAL KAOS Public repo for RHEL7/CentOS7
 
 ```
-[sudo] yum install -y https://yum.kaos.io/7/release/x86_64/kaos-repo-8.0-0.el7.noarch.rpm
+[sudo] yum install -y https://yum.kaos.st/7/release/x86_64/kaos-repo-9.1-0.el7.noarch.rpm
 [sudo] yum install 7zcat
 ```
 
@@ -70,4 +77,4 @@ Examples
 
 [EKOL](https://essentialkaos.com/ekol)
 
-<p align="center"><a href="https://essentialkaos.com"><img src="https://gh.kaos.io/ekgh.svg"/></a></p>
+<p align="center"><a href="https://essentialkaos.com"><img src="https://gh.kaos.st/ekgh.svg"/></a></p>
