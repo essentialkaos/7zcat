@@ -22,7 +22,7 @@ before_install:
   - tar xf shellcheck-latest.linux.x86_64.tar.xz
   - ./shellcheck-latest/shellcheck --version
   - docker pull "$IMAGE"
-  - wget https://raw.githubusercontent.com/essentialkaos/perfecto/master/perfecto-docker
+  - wget https://kaos.sh/perfecto/perfecto-docker
   - chmod +x perfecto-docker
 
 script:
