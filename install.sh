@@ -12,7 +12,7 @@
 # /$$$$$$| $$ \  $$|  $$$$$$/   | $$  | $$  | $$| $$$$$$$$| $$$$$$$$| $$$$$$$$| $$  | $$
 #|______/|__/  \__/ \______/    |__/  |__/  |__/|________/|________/|________/|__/  |__/
 #
-#                            EK UTILITY INSTALLER v1.2.0
+#                            EK UTILITY INSTALLER v1.2.1
 #
 ########################################################################################
 
@@ -136,7 +136,7 @@ doInstall() {
     *) error "Unsupported platform" ; requireFailed=true 
   esac
 
-  if [[ $requireFailed ]] ; then
+  if [[ -n "$requireFailed" ]] ; then
     show "" && exit 1
   fi
 
@@ -163,7 +163,7 @@ action() {
 
   shift 1
 
-  if [[ $debug ]] ; then
+  if [[ -n "$debug" ]] ; then
     # shellcheck disable=SC2068
     $@
   else
