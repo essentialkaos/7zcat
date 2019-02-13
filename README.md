@@ -29,8 +29,8 @@
 
 We provide simple bash script `install.sh` for installing app from the sources.
 
-```
-... install 7zip
+```bash
+# install 7zip
 
 git clone https://github.com/essentialkaos/7zcat.git
 cd 7zcat
@@ -42,6 +42,17 @@ If you have some issues with installing, try to use script in debug mode:
 
 ```
 sudo ./install.sh --debug
+```
+
+#### Using `curl`/`wget`
+
+```bash
+wget https://kaos.sh/7zcat/SOURCES/7zcat
+# or
+curl -o 7zcat -L https://kaos.sh/7zcat/SOURCES/7zcat
+
+chmod +x 7zcat
+[sudo] mv 7zcat /usr/bin/
 ```
 
 ### Usage
