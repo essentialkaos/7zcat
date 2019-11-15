@@ -267,7 +267,6 @@ about() {
   show ""
 }
 
-
 # Show warning message about unsupported argument
 #
 # 1: Argument name (String)
