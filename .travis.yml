@@ -18,15 +18,15 @@ addons:
       - p7zip-full
 
 before_install:
-  - wget https://storage.googleapis.com/shellcheck/shellcheck-latest.linux.x86_64.tar.xz
-  - tar xf shellcheck-latest.linux.x86_64.tar.xz
-  - ./shellcheck-latest/shellcheck --version
+  - wget https://storage.googleapis.com/shellcheck/shellcheck-stable.linux.x86_64.tar.xz
+  - tar xf shellcheck-stable.linux.x86_64.tar.xz
+  - ./shellcheck-stable/shellcheck --version
   - docker pull "$IMAGE"
   - wget https://kaos.sh/perfecto/perfecto-docker
   - chmod +x perfecto-docker
 
 script:
-  - bash -c 'shopt -s globstar; ./shellcheck-latest/shellcheck install.sh'
-  - bash -c 'shopt -s globstar; ./shellcheck-latest/shellcheck SOURCES/7zcat'
+  - bash -c 'shopt -s globstar; ./shellcheck-stable/shellcheck install.sh'
+  - bash -c 'shopt -s globstar; ./shellcheck-stable/shellcheck SOURCES/7zcat'
   - bash .travis/script.sh
   - ./perfecto-docker 7zcat.spec
