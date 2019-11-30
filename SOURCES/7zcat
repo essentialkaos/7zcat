@@ -3,8 +3,14 @@
 
 ########################################################################################
 
+if [[ -n "${7ZCAT_DEBUG}" ]] ; then
+  set -x
+fi
+
+########################################################################################
+
 APP="7zcat"
-VER="1.3.3"
+VER="1.3.4"
 
 ########################################################################################
 
@@ -67,6 +73,8 @@ main() {
     error "Error! 7zip not installed." $RED
     exit 1
   fi
+
+  trap errHandler ERR
 
   [[ -n "$pass" ]] && password="$pass"
   [[ "$password" == "true" ]] && readUserPassword
@@ -275,6 +283,18 @@ about() {
 # Echo: No
 showArgWarn() {
   error "Unknown argument $1" $RED
+  exit 1
+}
+
+# Handler for errors
+#
+# Code: No
+# Echo: No
+errHandler() {
+  while caller $((n++)) ; do
+    true
+  done
+
   exit 1
 }
 
