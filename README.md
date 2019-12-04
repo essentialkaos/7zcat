@@ -3,7 +3,7 @@
 <p align="center"><a href="#installation">Installation</a> • <a href="#usage">Usage</a> • <a href="#build-status">Build Status</a> • <a href="#license">License</a></p>
 
 <p align="center">
-  <a href="https://travis-ci.org/essentialkaos/7zcat"><img src="https://travis-ci.org/essentialkaos/7zcat.svg"></a>
+  <a href="https://travis-ci.com/essentialkaos/7zcat"><img src="https://travis-ci.com/essentialkaos/7zcat.svg"></a>
   <a href="https://essentialkaos.com/ekol"><img src="https://gh.kaos.st/ekol.svg"></a>
 </p>
 
@@ -81,8 +81,8 @@ Examples
 
 | Branch | Status |
 |--------|--------|
-| `master` | [![Build Status](https://travis-ci.org/essentialkaos/7zcat.svg?branch=master)](https://travis-ci.org/essentialkaos/7zcat) |
-| `develop` | [![Build Status](https://travis-ci.org/essentialkaos/7zcat.svg?branch=develop)](https://travis-ci.org/essentialkaos/7zcat) |
+| `master` | [![Build Status](https://travis-ci.com/essentialkaos/7zcat.svg?branch=master)](https://travis-ci.com/essentialkaos/7zcat) |
+| `develop` | [![Build Status](https://travis-ci.com/essentialkaos/7zcat.svg?branch=develop)](https://travis-ci.com/essentialkaos/7zcat) |
 
 ### License
 
