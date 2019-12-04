@@ -2,7 +2,7 @@
 
 Summary:         Utility for uncompressing data from 7z archive to stdout
 Name:            7zcat
-Version:         1.3.4
+Version:         1.3.5
 Release:         0%{?dist}
 Group:           Applications/System
 License:         EKOL
@@ -46,6 +46,9 @@ rm -rf %{buildroot}
 ################################################################################
 
 %changelog
+* Wed Dec 04 2019 Anton Novojilov <andy@essentialkaos.com> - 1.3.5-0
+- Removed handler for script errors
+
 * Sat Nov 30 2019 Anton Novojilov <andy@essentialkaos.com> - 1.3.4-0
 - Added handling of SCRIPT_DEBUG environment variable for enabling debug mode
 - Added handler for script errors
