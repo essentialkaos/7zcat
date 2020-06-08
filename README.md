@@ -1,11 +1,13 @@
 <p align="center"><a href="#readme"><img src="https://gh.kaos.st/7zcat.svg"/></a></p>
 
-<p align="center"><a href="#installation">Installation</a> • <a href="#usage">Usage</a> • <a href="#build-status">Build Status</a> • <a href="#license">License</a></p>
-
 <p align="center">
   <a href="https://travis-ci.com/essentialkaos/7zcat"><img src="https://travis-ci.com/essentialkaos/7zcat.svg"></a>
   <a href="https://essentialkaos.com/ekol"><img src="https://gh.kaos.st/ekol.svg"></a>
 </p>
+
+<p align="center"><a href="#installation">Installation</a> • <a href="#usage">Usage</a> • <a href="#build-status">Build Status</a> • <a href="#license">License</a></p>
+
+<br/>
 
 `7zcat` is simple utility for uncompressing 7z files and writing uncompressed data to standart output.
 
