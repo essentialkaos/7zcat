@@ -1,9 +1,9 @@
-language: bash
+language: shell
 
 services:
   - docker
 
-matrix:
+jobs:
   fast_finish: true
 
 env:
