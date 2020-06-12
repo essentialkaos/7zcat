@@ -13,18 +13,11 @@
 
 ### Installation
 
-#### From ESSENTIAL KAOS Public repo for RHEL6/CentOS6
+#### From [ESSENTIAL KAOS Public Repository](https://yum.kaos.st)
 
-```
-[sudo] yum install -y https://yum.kaos.st/6/release/x86_64/kaos-repo-9.1-0.el6.noarch.rpm
-[sudo] yum install 7zcat
-```
-
-#### From ESSENTIAL KAOS Public repo for RHEL7/CentOS7
-
-```
-[sudo] yum install -y https://yum.kaos.st/7/release/x86_64/kaos-repo-9.1-0.el7.noarch.rpm
-[sudo] yum install 7zcat
+```bash
+sudo yum install -y https://yum.kaos.st/get/$(uname -r).rpm
+sudo yum install 7zcat
 ```
 
 #### Using `install.sh`
@@ -51,10 +44,10 @@ sudo ./install.sh --debug
 ```bash
 wget https://kaos.sh/7zcat/SOURCES/7zcat
 # or
-curl -o 7zcat -L https://kaos.sh/7zcat/SOURCES/7zcat
+curl -fL# -o 7zcat https://kaos.sh/7zcat/SOURCES/7zcat
 
 chmod +x 7zcat
-[sudo] mv 7zcat /usr/bin/
+sudo mv 7zcat /usr/bin/
 ```
 
 ### Usage
