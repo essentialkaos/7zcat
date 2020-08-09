@@ -5,7 +5,7 @@ Name:            7zcat
 Version:         1.3.5
 Release:         0%{?dist}
 Group:           Applications/System
-License:         EKOL
+License:         Apache License, Version 2.0
 URL:             https://github.com/essentialkaos/7zcat
 
 Source0:         https://source.kaos.st/%{name}/%{name}-%{version}.tar.bz2
@@ -40,7 +40,7 @@ rm -rf %{buildroot}
 
 %files
 %defattr(-,root,root,-)
-%doc LICENSE.EN LICENSE.RU
+%doc LICENSE
 %{_bindir}/%{name}
 
 ################################################################################
