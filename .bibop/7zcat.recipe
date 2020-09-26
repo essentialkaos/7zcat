@@ -1,0 +1,21 @@
+  # Bibop recipe for 7zcat
+# See more: https://kaos.sh/bibop
+
+pkg 7zcat
+
+fast-finish yes
+
+var data TEST1234ABCD
+var password test
+
+command "7zcat test.7z" "Test basic archive unpacking"
+  expect "{data}"
+  exit 0
+
+command "7zcat -p {password} test-pswd.7z" "Test password-protected archive unpacking"
+  expect "{data}"
+  exit 0
+
+command "7zcat -p WrOnG test-pswd.7z" "Test wrong password on password-protected archive unpacking"
+  expect-stderr "Error! Wrong password."
+  !exit 0

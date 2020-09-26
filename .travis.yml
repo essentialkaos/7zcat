@@ -23,9 +23,10 @@ before_install:
   - docker pull "$IMAGE"
   - wget https://kaos.sh/perfecto/perfecto-docker
   - chmod +x perfecto-docker
+  - bash <(curl -fsSL https://apps.kaos.st/get) bibop
 
 script:
   - bash -c 'shopt -s globstar; ./shellcheck-latest/shellcheck install.sh'
   - bash -c 'shopt -s globstar; ./shellcheck-latest/shellcheck SOURCES/7zcat'
-  - bash .travis/script.sh
+  - ./bibop -ip -p SOURCES .bibop/7zcat.recipe
   - ./perfecto-docker 7zcat.spec
