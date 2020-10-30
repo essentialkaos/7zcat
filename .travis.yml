@@ -24,6 +24,7 @@ before_install:
   - wget https://kaos.sh/perfecto/perfecto-docker
   - chmod +x perfecto-docker
   - bash <(curl -fsSL https://apps.kaos.st/get) bibop
+	- ./bibop --version
 
 script:
   - bash -c 'shopt -s globstar; ./shellcheck-latest/shellcheck install.sh'

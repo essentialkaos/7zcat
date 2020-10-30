@@ -17,5 +17,5 @@ command "7zcat -p {password} test-pswd.7z" "Test password-protected archive unpa
   exit 0
 
 command "7zcat -p WrOnG test-pswd.7z" "Test wrong password on password-protected archive unpacking"
-  expect-stderr "Error! Wrong password."
+  expect "Error! Wrong password."
   !exit 0
