@@ -1,4 +1,4 @@
-  # Bibop recipe for 7zcat
+# Bibop recipe for 7zcat
 # See more: https://kaos.sh/bibop
 
 pkg 7zcat
