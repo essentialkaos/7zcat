@@ -1,0 +1,89 @@
+name: CI
+
+on:
+  push:
+    branches: [master, develop]
+  pull_request:
+    branches: [master]
+
+jobs:
+  Bibop:
+    name: Bibop
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Install 7zip
+        run: sudo apt-get install -y -qq p7zip-full
+
+      - name: Print 7zip version
+        run: 7za -h
+
+      - name: Install bibop
+        run: bash <(curl -fsSL https://apps.kaos.st/get) bibop
+
+      - name: Print bibop version
+        run: ./bibop --version
+
+      - name: Checkout source code
+        uses: actions/checkout@v2
+
+      - name: Run bibop tests
+        run: ./bibop -ip -p SOURCES .bibop/7zcat.recipe
+
+  Perfecto:
+    name: Perfecto
+    runs-on: ubuntu-latest
+
+    needs: Bibop
+
+    steps:
+      - name: Code checkout
+        uses: actions/checkout@v2
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Run Perfecto docker image
+        uses: docker://essentialkaos/perfecto:slim
+        with:
+          args: --version
+
+      - name: Install perfecto-docker
+        run: |
+          wget https://kaos.sh/perfecto/perfecto-docker
+          chmod +x perfecto-docker
+
+      - name: Run Perfecto check
+        env:
+          IMAGE: essentialkaos/perfecto:slim
+        run: ./perfecto-docker 7zcat.spec
+
+  Shellcheck:
+    name: Shellcheck
+    runs-on: ubuntu-latest
+
+    needs: Bibop
+
+    env:
+      SHELLCHECK_VERSION: 0.7.1
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install Shellcheck
+        run: |
+          wget https://github.com/koalaman/shellcheck/releases/download/v${SHELLCHECK_VERSION}/shellcheck-v${SHELLCHECK_VERSION}.linux.x86_64.tar.xz
+          tar xf shellcheck-v${SHELLCHECK_VERSION}.linux.x86_64.tar.xz
+          mv shellcheck-v${SHELLCHECK_VERSION} shellcheck-latest
+
+      - name: Print Shellcheck version info
+        run: ./shellcheck-latest/shellcheck --version
+
+      - name: Check scripts
+        run: |
+          bash -c 'shopt -s globstar; ./shellcheck-latest/shellcheck install.sh'
+          bash -c 'shopt -s globstar; ./shellcheck-latest/shellcheck SOURCES/7zcat'

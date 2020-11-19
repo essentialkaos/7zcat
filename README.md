@@ -1,7 +1,7 @@
 <p align="center"><a href="#readme"><img src="https://gh.kaos.st/7zcat.svg"/></a></p>
 
 <p align="center">
-  <a href="https://travis-ci.com/essentialkaos/7zcat"><img src="https://travis-ci.com/essentialkaos/7zcat.svg"></a>
+  <a href="https://github.com/essentialkaos/7zcat/actions"><img src="https://github.com/essentialkaos/7zcat/workflows/CI/badge.svg" alt="GitHub Actions Status" /></a>
   <a href="#license"><img src="https://gh.kaos.st/apache2.svg"></a>
 </p>
 
@@ -76,8 +76,8 @@ Examples
 
 | Branch | Status |
 |--------|--------|
-| `master` | [![Build Status](https://travis-ci.com/essentialkaos/7zcat.svg?branch=master)](https://travis-ci.com/essentialkaos/7zcat) |
-| `develop` | [![Build Status](https://travis-ci.com/essentialkaos/7zcat.svg?branch=develop)](https://travis-ci.com/essentialkaos/7zcat) |
+| `master` | [![CI](https://github.com/essentialkaos/7zcat/workflows/CI/badge.svg?branch=master)](https://github.com/essentialkaos/7zcat/actions) |
+| `develop` | [![CI](https://github.com/essentialkaos/7zcat/workflows/CI/badge.svg?branch=develop)](https://github.com/essentialkaos/7zcat/actions) |
 
 ### License
 
