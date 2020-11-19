@@ -18,14 +18,14 @@ jobs:
       - name: Print 7zip version
         run: 7za -h
 
+      - name: Checkout source code
+        uses: actions/checkout@v2
+
       - name: Install bibop
         run: bash <(curl -fsSL https://apps.kaos.st/get) bibop
 
       - name: Print bibop version
         run: ./bibop --version
-
-      - name: Checkout source code
-        uses: actions/checkout@v2
 
       - name: Run bibop tests
         run: ./bibop -ip -p SOURCES .bibop/7zcat.recipe
