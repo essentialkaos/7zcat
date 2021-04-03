@@ -25,9 +25,7 @@ sudo yum install 7zcat
 We provide simple bash script `install.sh` for installing app from the sources.
 
 ```bash
-# install 7zip
-
-git clone https://github.com/essentialkaos/7zcat.git
+git clone https://kaos.sh/7zcat.git
 cd 7zcat
 
 sudo ./install.sh
