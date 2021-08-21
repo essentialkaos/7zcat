@@ -67,14 +67,11 @@ jobs:
 
     needs: Bibop
 
-    env:
-      SHELLCHECK_VERSION: 0.7.1
-
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
       - name: Check scripts with Shellcheck
-        uses: essentialkaos/shellcheck-action@v1
+        uses: essentialkaos/shellcheck-action@master
         with:
           files: install.sh SOURCES/7zcat
