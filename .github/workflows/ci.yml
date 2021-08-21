@@ -74,16 +74,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Install Shellcheck
-        run: |
-          wget https://github.com/koalaman/shellcheck/releases/download/v${SHELLCHECK_VERSION}/shellcheck-v${SHELLCHECK_VERSION}.linux.x86_64.tar.xz
-          tar xf shellcheck-v${SHELLCHECK_VERSION}.linux.x86_64.tar.xz
-          mv shellcheck-v${SHELLCHECK_VERSION} shellcheck-latest
-
-      - name: Print Shellcheck version info
-        run: ./shellcheck-latest/shellcheck --version
-
-      - name: Check scripts
-        run: |
-          bash -c 'shopt -s globstar; ./shellcheck-latest/shellcheck install.sh'
-          bash -c 'shopt -s globstar; ./shellcheck-latest/shellcheck SOURCES/7zcat'
+      - name: Check scripts with Shellcheck
+        uses: essentialkaos/shellcheck-action@v1
+        with:
+          files: install.sh SOURCES/7zcat
