@@ -22,7 +22,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Run test recipes with Bibop
-        uses: essentialkaos/bibop-action@master
+        uses: essentialkaos/bibop-action@v1
         with:
           recipe: .bibop/7zcat.recipe
           path: SOURCES
