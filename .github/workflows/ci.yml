@@ -21,14 +21,11 @@ jobs:
       - name: Checkout source code
         uses: actions/checkout@v2
 
-      - name: Install bibop
-        run: bash <(curl -fsSL https://apps.kaos.st/get) bibop
-
-      - name: Print bibop version
-        run: ./bibop --version
-
-      - name: Run bibop tests
-        run: ./bibop -ip -p SOURCES .bibop/7zcat.recipe
+      - name: Run test recipes with Bibop
+        uses: essentialkaos/bibop-action@master
+        with:
+          recipe: .bibop/7zcat.recipe
+          path: SOURCES
 
   Perfecto:
     name: Perfecto
