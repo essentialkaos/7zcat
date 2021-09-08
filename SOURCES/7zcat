@@ -253,7 +253,7 @@ error() {
 # Code: No
 # Echo: No
 warn() {
-  show "$*" $BROWN 1>&2
+  show "$*" $YELLOW 1>&2
 }
 
 # Print usage info
