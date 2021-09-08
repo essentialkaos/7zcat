@@ -215,6 +215,8 @@ maskPassword() {
     result="${result}${masksym}"
   done
 
+  result=$(echo -e "$result")
+
   printf "\e[1A%s\n" "$result"
 }
 
