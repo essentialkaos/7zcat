@@ -2,11 +2,11 @@
 
 Summary:         Utility for uncompressing data from 7z archive to stdout
 Name:            7zcat
-Version:         1.3.5
+Version:         1.4.0
 Release:         0%{?dist}
 Group:           Applications/System
 License:         Apache License, Version 2.0
-URL:             https://github.com/essentialkaos/7zcat
+URL:             https://kaos.sh/7zcat
 
 Source0:         https://source.kaos.st/%{name}/%{name}-%{version}.tar.bz2
 
@@ -46,6 +46,10 @@ rm -rf %{buildroot}
 ################################################################################
 
 %changelog
+* Thu Sep 09 2021 Anton Novojilov <andy@essentialkaos.com> - 1.4.0-0
+- Improved UI
+- Code refactoring
+
 * Wed Dec 04 2019 Anton Novojilov <andy@essentialkaos.com> - 1.3.5-0
 - Removed handler for script errors
 
