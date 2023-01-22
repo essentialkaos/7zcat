@@ -12,10 +12,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Install 7zip
+      - name: Install p7zip
         run: sudo apt-get install -y -qq p7zip-full
 
-      - name: Print 7zip version
+      - name: Print p7zip version
         run: 7za -h
 
       - name: Checkout source code
@@ -61,4 +61,4 @@ jobs:
       - name: Check scripts with Shellcheck
         uses: essentialkaos/shellcheck-action@v1
         with:
-          files: install.sh SOURCES/7zcat
+          files: SOURCES/7zcat
