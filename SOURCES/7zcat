@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# shellcheck disable=SC1117,SC2034,SC2154
+# shellcheck disable=SC2034
 
 ########################################################################################
 
@@ -10,7 +10,7 @@ fi
 ########################################################################################
 
 APP="7zcat"
-VER="1.4.0"
+VER="2.0.0"
 
 ########################################################################################
 
@@ -47,99 +47,111 @@ CL_BL_GREY="\e[1;${GREY};49m"
 
 ########################################################################################
 
-SUPPORTED_ARGS="pass password !fast !no_colors !help !usage !version !ver"
-SHORT_ARGS="p:password F:!fast nc:!no_colors h:!help v:!version"
+SUPPORTED_OPTS="password !fast !no_colors !help !version"
+SHORT_OPTS="p:password F:!fast nc:!no_colors h:!help v:!version"
 
 ########################################################################################
 
 prompt="› "
 masksym="${CL_DARK}•${CL_NORM}"
 
+binary="7za"
+options="-so -bd"
+
 ########################################################################################
 
 main() {
-  if [[ ! -t 1 || -n "$no_colors" ]] ; then
+  if [[ ! -t 1 || -n "$no_colors" || -n "$NO_COLOR" ]] ; then
     unset NORM BOLD UNLN RED GREEN YELLOW BLUE MAG CYAN GREY DARK
     unset CL_NORM CL_BOLD CL_UNLN CL_RED CL_GREEN CL_YELLOW CL_BLUE CL_MAG CL_CYAN CL_GREY CL_DARK
     unset CL_BL_RED CL_BL_GREEN CL_BL_YELLOW CL_BL_BLUE CL_BL_MAG CL_BL_CYAN CL_BL_GREY CL_BL_DARK
+    no_colors=true
   fi
 
-  if [[ -n "$ver" || -n "$version" ]] ; then
+  if [[ -n "$version" ]] ; then
     about
     exit 0
   fi
 
-  if [[ -n "$help" || -n "$usage" || $# -eq 0 ]] ; then
+  if [[ -n "$help" || $# -eq 0 ]] ; then
     usage
     exit 0
   fi
 
-  if ! type -P 7za &>/dev/null ; then
-    error "Error! 7zip not installed."
-    exit 1
+  prepare
+  process "$@"
+
+  exit $?
+}
+
+# Prepare for script execution
+#
+# Code: No
+# Echo: No
+prepare() {
+  if [[ -z "$BINARY" ]] ; then
+    if ! type -P 7za &>/dev/null ; then
+      if ! type -P 7z &>/dev/null ; then
+        error "7zip/p7zip not installed"
+        exit 1
+      else
+        binary="7z"
+      fi
+    fi
+  else
+    binary="$BINARY"
   fi
-
-  configureUI
-
-  [[ -n "$pass" ]] && password="$pass"
-  [[ "$password" == "true" ]] && readUserPassword
-
-  local file file_name has_errors options
-
-  options="-so -bd"
 
   if [[ -z "$fast" ]] ; then
     options="-mmt1 $options"
   fi
 
-  for file in "$@" ; do
-    file_name=$(basename "$file")
-
-    if [[ ! -f $file ]] ; then
-      error "Error! ${CL_BL_RED}${file_name}${CL_RED} is not a file."
-      continue
-    elif [[ ! -r $file ]]; then
-      error "Error! ${CL_BL_RED}${file_name}${CL_RED} is not a readable file."
-      continue
-    fi
-
-    if ! is7zArch "$file" ; then
-      error "Error! ${CL_BL_RED}${file_name}${CL_RED} is not a 7z archive."
-      continue
-    fi
-
-    if isProtectedArch "$file" && [[ -z "$password" ]] ; then
-      readUserPassword "$file"
-    fi
-
-    if [[ -n "$password" ]] ; then
-      # shellcheck disable=SC2086
-      7za e -p"${password}" $options "$file" 2> /dev/null
-
-      if [[ $? -eq 2 ]] ; then
-        error "Error! Wrong password."
-        has_errors=true
-      fi
-    else
-      # shellcheck disable=SC2086
-      7za e $options "$file" 2> /dev/null
-    fi
-  done
-
-  if [[ -n "$has_errors" ]] ; then
-    exit 1
-  fi
-}
-
-# Configure user interface
-#
-# Code: No
-# Echo: No
-configureUI() {
   if ! printenv | grep 'LANG' | grep -qi 'UTF-8' ; then
     prompt="> "
     masksym="*"
   fi
+
+  if [[ "$password" == "true" ]] ; then
+    readUserPassword
+  fi
+}
+
+# Process files
+#
+# *: All arguments passed to script
+#
+# Code: Yes
+# Echo: No
+process() {
+  local file has_errors
+
+  for file in "$@" ; do
+    if ! checkFile "$file" ; then
+      has_errors=true
+      continue
+    fi
+
+    if isProtectedFile "$file" && [[ -z "$password" ]] ; then
+      readUserPassword "$file"
+    fi
+
+    if [[ -n "$password" ]] ; then
+      if ! readFile "$file" ; then
+        error "Wrong password"
+        has_errors=true
+      fi
+    else
+      if ! readFile "$file" ; then
+        has_errors=true
+      fi
+    fi
+  done
+
+  if [[ -n "$has_errors" ]] ; then
+    return 1
+  fi
+
+  return 0
 }
 
 # Read password
@@ -155,9 +167,9 @@ readUserPassword() {
 
   while : ; do
     if [[ -n "$file_name" ]] ; then
-      show "Please enter password for $file_name:" $CYAN
+      show "Please enter password for $file_name:" $GREY
     else
-      show "Please enter password:" $CYAN
+      show "Please enter password:" $GREY
     fi
 
     read -re -p "${prompt}" user_pass
@@ -175,6 +187,58 @@ readUserPassword() {
   done
 }
 
+# Check file before unpacking
+#
+# 1: Path to file (String)
+#
+# Code: Yes
+# Echo: No
+checkFile() {
+  local file="$1"
+
+  if [[ ! -e "$file" ]] ; then
+    error "File ${CL_BL_RED}${file}${CL_RED} doesn't exist"
+    return 1
+  fi
+
+  if [[ ! -f "$file" ]] ; then
+    error "${CL_BL_RED}${file}${CL_RED} is not a file"
+    return 1
+  fi
+
+  if [[ ! -r "$file" ]] ; then
+    error "File ${CL_BL_RED}${file}${CL_RED} is not readable"
+    return 1
+  fi
+
+  if ! is7zArch "$file" ; then
+    error "File ${CL_BL_RED}${file}${CL_RED} is not a 7z archive"
+    return 1
+  fi
+
+  return 0
+}
+
+# Read file
+#
+# 1: Path to file (String)
+#
+# Code: Yes
+# Echo: No
+readFile() {
+  local file="$1"
+  local cmd_options="$options"
+
+  if [[ -n "$password" ]] ; then
+    cmd_options="$cmd_options -p${password}"
+  fi
+
+  # shellcheck disable=SC2086
+  "$binary" e $cmd_options "$file" 2>/dev/null
+
+  return $?
+}
+
 # Check if given file is 7z archive
 #
 # 1: Path to file (String)
@@ -182,7 +246,7 @@ readUserPassword() {
 # Code: Yes
 # Echo: No
 is7zArch() {
-  7za l "$1" &> /dev/null
+  "$binary" l "$1" &> /dev/null
   return $?
 }
 
@@ -192,12 +256,12 @@ is7zArch() {
 #
 # Code: Yes
 # Echo: No
-isProtectedArch() {
-  if [[ $(7za l "$1" | grep "7zAES") != "" ]] ; then
+isProtectedFile() {
+  if [[ $("$binary" l "$1" | grep "7zAES") != "" ]] ; then
     return 0
-  else
-    return 1
   fi
+
+  return 1
 }
 
 # Replace entered password by masking symbols
@@ -237,6 +301,38 @@ show() {
   fi
 }
 
+# Show formated message with option info
+#
+# 1: Option (String)
+# 2: Description (String)
+# 3: Arguments (String) [Optional]
+#
+# Code: No
+# Echo: No
+showo() {
+  local optn optd optp optt optf breadcrumbs
+
+  optn="$1"
+  optd="$2"
+  optp="$3"
+
+  if [[ -n "$DARK" ]] ; then
+    breadcrumbs="............................"
+  else
+    breadcrumbs="                            "
+  fi
+
+  if [[ -z "$optp" ]] ; then
+    optt="$optn"
+    optf=$(( 25 - ${#optt} ))
+    echo -e "  ${CL_GREEN}${optn}${CL_NORM} ${CL_DARK}${breadcrumbs:0:$optf}${CL_NORM} $optd"
+  else
+    optt="$optn $optp"
+    optf=$(( 25 - ${#optt} ))
+    echo -e "  ${CL_GREEN}${optn}${CL_NORM} ${CL_GREY}${optp}${CL_NORM} ${CL_DARK}${breadcrumbs:0:$optf}${CL_NORM} $optd"
+  fi
+}
+
 # Print error message
 #
 # 1: Message (String)
@@ -245,7 +341,7 @@ show() {
 # Code: No
 # Echo: No
 error() {
-  show "$*" $RED 1>&2
+  show "▲ $*" $RED 1>&2
 }
 
 # Shows warning message
@@ -255,7 +351,7 @@ error() {
 # Code: No
 # Echo: No
 warn() {
-  show "$*" $YELLOW 1>&2
+  show "▲ $*" $YELLOW 1>&2
 }
 
 # Print usage info
@@ -264,23 +360,15 @@ warn() {
 # Echo: No
 usage() {
   show ""
-  show "${CL_BOLD}Usage:${CL_NORM} 7zcat ${CL_GREEN}{options}${CL_NORM} file..."
+  show "${CL_BOLD}Usage:${CL_NORM} 7zcat ${CL_GREEN}{options}${CL_NORM} file…"
   show ""
   show "Options" $BOLD
   show ""
-  if [[ -n "$DARK" ]] ; then
-    show "  ${CL_GREEN}--password, -p${CL_NORM} ${CL_GREY}password${CL_NORM} ${CL_DARK}..${CL_NORM} Use password for unpacking archives"
-    show "  ${CL_GREEN}--fast, -F${CL_NORM} ${CL_DARK}...............${CL_NORM} Use all CPUs for unpacking data"
-    show "  ${CL_GREEN}--no-color, -nc${CL_NORM} ${CL_DARK}..........${CL_NORM} Disable colors in output"
-    show "  ${CL_GREEN}--help, -h${CL_NORM} ${CL_DARK}...............${CL_NORM} Show this help message"
-    show "  ${CL_GREEN}--version, -v${CL_NORM} ${CL_DARK}............${CL_NORM} Show information about version"
-  else
-    show "  ${CL_GREEN}--password, -p${CL_NORM} ${CL_GREY}password${CL_NORM}    Use password for unpacking archives"
-    show "  ${CL_GREEN}--fast, -F${CL_NORM}                 Use all CPUs for unpacking data"
-    show "  ${CL_GREEN}--no-color, -nc${CL_NORM}            Disable colors in output"
-    show "  ${CL_GREEN}--help, -h${CL_NORM}                 Show this help message"
-    show "  ${CL_GREEN}--version, -v${CL_NORM}              Show information about version"
-  fi
+  showo "--password, -p" "Use password for unpacking archives" "password"
+  showo "--fast, -F" "Use all CPUs for unpacking data"
+  showo "--no-color, -nc" "Disable colors in output"
+  showo "--help, -h" "Show this help message"
+  showo "--version, -v" "Show information about version"
   show ""
   show "Examples" $BOLD
   show ""
@@ -305,122 +393,123 @@ about() {
   show ""
 }
 
-# Show warning message about unsupported argument
+# Show warning message about unsupported option
 #
-# 1: Argument name (String)
+# 1: Option name (String)
 #
 # Code: No
 # Echo: No
-showArgWarn() {
-  error "Unknown argument $1"
+showOptWarn() {
+  error "Unknown option $1"
   exit 1
 }
 
-## ARGUMENTS PARSING 4 #################################################################
+## OPTIONS PARSING 5 ###########################################################
 
-[[ $# -eq 0 ]] && main && exit $?
+if [[ $# -eq 0 ]] ; then
+  main
+fi
 
-unset arg argn argm argv argt argk
+unset opt optn optm optv optt optk
 
-argv="$*" ; argt=""
+optv="$*" ; optt=""
 
 while [[ -n "$1" ]] ; do
-  if [[ "$1" =~ \  && -n "$argn" ]] ; then
-    declare "$argn=$1"
+  if [[ "$1" =~ \  && -n "$optn" ]] ; then
+    declare "$optn=$1"
 
-    unset argn && shift && continue
+    unset optn && shift && continue
   elif [[ $1 =~ ^-{1}[a-zA-Z0-9]{1,2}+.*$ ]] ; then
-    argm=${1:1}
+    optm=${1:1}
 
-    if [[ \ $SHORT_ARGS\  =~ \ $argm:!?([a-zA-Z0-9_]*) ]] ; then
-      arg="${BASH_REMATCH[1]}"
+    if [[ \ $SHORT_OPTS\  =~ \ $optm:!?([a-zA-Z0-9_]*) ]] ; then
+      opt="${BASH_REMATCH[1]}"
     else
-      declare -F showArgWarn &>/dev/null && showArgWarn "-$argm"
+      declare -F showOptWarn &>/dev/null && showOptWarn "-$optm"
       shift && continue
     fi
 
-    if [[ -z "$argn" ]] ; then
-      argn=$arg
+    if [[ -z "$optn" ]] ; then
+      optn=$opt
     else
       # shellcheck disable=SC2015
-      [[ -z "$argk" ]] && ( declare -F showArgValWarn &>/dev/null && showArgValWarn "--$argn" ) || declare "$argn=true"
-      argn=$arg
+      [[ -z "$optk" ]] && ( declare -F showOptValWarn &>/dev/null && showOptValWarn "--$optn" ) || declare "$optn=true"
+      optn=$opt
     fi
 
-    if [[ ! $SUPPORTED_ARGS\  =~ !?$argn\  ]] ; then
-      declare -F showArgWarn &>/dev/null && showArgWarn "-$argm"
+    if [[ ! $SUPPORTED_OPTS\  =~ !?$optn\  ]] ; then
+      declare -F showOptWarn &>/dev/null && showOptWarn "-$optm"
       shift && continue
     fi
 
     if [[ ${BASH_REMATCH[0]:0:1} == "!" ]] ; then
-      declare "$argn=true" ; unset argn ; argk=true
+      declare "$optn=true" ; unset optn ; optk=true
     else
-      unset argk
+      unset optk
     fi
 
     shift && continue
   elif [[ "$1" =~ ^-{2}[a-zA-Z]{1}[a-zA-Z0-9_-]+.*$ ]] ; then
-    arg=${1:2}
+    opt=${1:2}
 
-    if [[ $arg == *=* ]] ; then
-      IFS="=" read -ra arg <<< "$arg"
+    if [[ $opt == *=* ]] ; then
+      IFS="=" read -ra opt <<< "$opt"
 
-      argm="${arg[0]}" ; argm=${argm//-/_}
+      optm="${opt[0]}" ; optm=${optm//-/_}
 
-      if [[ ! $SUPPORTED_ARGS\  =~ $argm\  ]] ; then
-        declare -F showArgWarn &>/dev/null && showArgWarn "--${arg[0]//_/-}"
+      if [[ ! $SUPPORTED_OPTS\  =~ $optm\  ]] ; then
+        declare -F showOptWarn &>/dev/null && showOptWarn "--${opt[0]//_/-}"
         shift && continue
       fi
 
       # shellcheck disable=SC2015
-      [[ -n "${!argm}" && $MERGEABLE_ARGS\  =~ $argm\  ]] && declare "$argm=${!argm} ${arg[*]:1:99}" || declare "$argm=${arg[*]:1:99}"
+      [[ -n "${!optm}" && $MERGEABLE_OPTS\  =~ $optm\  ]] && declare "$optm=${!optm} ${opt[*]:1:99}" || declare "$optm=${opt[*]:1:99}"
 
-      unset argm && shift && continue
+      unset optm && shift && continue
     else
       # shellcheck disable=SC2178
-      arg=${arg//-/_}
+      opt=${opt//-/_}
 
-      if [[ -z "$argn" ]] ; then
+      if [[ -z "$optn" ]] ; then
         # shellcheck disable=SC2128
-        argn=$arg
+        optn=$opt
       else
         # shellcheck disable=SC2015
-        [[ -z "$argk" ]] && ( declare -F showArgValWarn &>/dev/null && showArgValWarn "--$argn" ) || declare "$argn=true"
+        [[ -z "$optk" ]] && ( declare -F showOptValWarn &>/dev/null && showOptValWarn "--$optn" ) || declare "$optn=true"
         # shellcheck disable=SC2128
-        argn=$arg
+        optn=$opt
       fi
 
-      if [[ ! $SUPPORTED_ARGS\  =~ !?$argn\  ]] ; then
-        declare -F showArgWarn &>/dev/null && showArgWarn "--${argn//_/-}"
+      if [[ ! $SUPPORTED_OPTS\  =~ !?$optn\  ]] ; then
+        declare -F showOptWarn &>/dev/null && showOptWarn "--${optn//_/-}"
         shift && continue
       fi
 
       if [[ ${BASH_REMATCH[0]:0:1} == "!" ]] ; then
-        declare "$argn=true" ; unset argn ; argk=true
+        declare "$optn=true" ; unset optn ; optk=true
       else
-        unset argk
+        unset optk
       fi
 
       shift && continue
     fi
   else
-    if [[ -n "$argn" ]] ; then
+    if [[ -n "$optn" ]] ; then
       # shellcheck disable=SC2015
-      [[ -n "${!argn}" && $MERGEABLE_ARGS\  =~ $argn\  ]] && declare "$argn=${!argn} $1" || declare "$argn=$1"
+      [[ -n "${!optn}" && $MERGEABLE_OPTS\  =~ $optn\  ]] && declare "$optn=${!optn} $1" || declare "$optn=$1"
 
-      unset argn && shift && continue
+      unset optn && shift && continue
     fi
   fi
 
-  argt="$argt $1" ; shift
-
+  optt="$optt $1" ; shift
 done
 
-[[ -n "$argn" ]] && declare "$argn=true"
+[[ -n "$optn" ]] && declare "$optn=true"
 
-unset arg argn argm argk
+unset opt optn optm optk
 
 # shellcheck disable=SC2015,SC2086
-[[ -n "$KEEP_ARGS" ]] && main $argv || main ${argt:1}
+[[ -n "$KEEP_OPTS" ]] && main $optv || main ${optt:1}
 
-########################################################################################
+################################################################################

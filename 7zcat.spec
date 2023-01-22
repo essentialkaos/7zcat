@@ -1,21 +1,19 @@
 ################################################################################
 
-Summary:         Utility for uncompressing data from 7z archive to stdout
-Name:            7zcat
-Version:         1.4.0
-Release:         0%{?dist}
-Group:           Applications/System
-License:         Apache License, Version 2.0
-URL:             https://kaos.sh/7zcat
+Summary:    Utility for uncompressing data from 7z archive to stdout
+Name:       7zcat
+Version:    2.0.0
+Release:    0%{?dist}
+Group:      Applications/System
+License:    Apache License, Version 2.0
+URL:        https://kaos.sh/7zcat
 
-Source0:         https://source.kaos.st/%{name}/%{name}-%{version}.tar.bz2
+Source0:    https://source.kaos.st/%{name}/%{name}-%{version}.tar.bz2
 
-BuildArch:       noarch
-BuildRoot:       %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+BuildArch:  noarch
+BuildRoot:  %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-Requires:        p7zip >= 16
-
-Provides:        %{name} = %{version}-%{release}
+Provides:   %{name} = %{version}-%{release}
 
 ################################################################################
 
@@ -46,6 +44,12 @@ rm -rf %{buildroot}
 ################################################################################
 
 %changelog
+* Sun Jan 22 2023 Anton Novojilov <andy@essentialkaos.com> - 2.0.0-0
+- Code refactoring
+- Added 7zip support
+- Better option parsing
+- UI improvements
+
 * Thu Sep 09 2021 Anton Novojilov <andy@essentialkaos.com> - 1.4.0-0
 - Improved UI
 - Code refactoring
