@@ -16,46 +16,33 @@
 #### From [ESSENTIAL KAOS Public Repository](https://yum.kaos.st)
 
 ```bash
-sudo yum install -y https://yum.kaos.st/get/$(uname -r).rpm
+sudo yum install -y https://yum.kaos.st/kaos-repo-latest.el$(grep 'CPE_NAME' /etc/os-release | tr -d '"' | cut -d':' -f5).noarch.rpm
 sudo yum install 7zcat
 ```
 
-#### Using `install.sh`
-
-We provide simple bash script `install.sh` for installing app from the sources.
+#### From GitHub repository
 
 ```bash
-git clone https://kaos.sh/7zcat.git
-cd 7zcat
-
-sudo ./install.sh
-```
-
-If you have some issues with installing, try to use script in debug mode:
-
-```
-sudo ./install.sh --debug
-```
-
-#### Using `curl`/`wget`
-
-```bash
-wget https://kaos.sh/7zcat/SOURCES/7zcat
-# or
-curl -fL# -o 7zcat https://kaos.sh/7zcat/SOURCES/7zcat
-
+curl -fL# -o cain https://kaos.sh/7zcat/SOURCES/7zcat
 chmod +x 7zcat
 sudo mv 7zcat /usr/bin/
+```
+
+Also, you can use the latest version of utility without installation:
+
+```bash
+bash <(curl -fsSL https://kaos.sh/7zcat/SOURCES/7zcat) # pass options and arguments here
 ```
 
 ### Usage
 
 ```
-Usage: 7zcat {options} file...
+Usage: 7zcat {options} file…
 
 Options
 
   --password, -p password    Use password for unpacking archives
+  --fast, -F                 Use all CPUs for unpacking data
   --no-color, -nc            Disable colors in output
   --help, -h                 Show this help message
   --version, -v              Show information about version
@@ -67,7 +54,6 @@ Examples
 
   7zcat -p test1234 protected-file.7z
   Show content of password protected file
-
 ```
 
 ### Build Status
