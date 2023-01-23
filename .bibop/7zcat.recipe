@@ -10,6 +10,11 @@ fast-finish yes
 var data TEST1234ABCD
 var password test
 
+################################################################################
+
+command "-" "Check environment"
+  app "7zcat"
+
 ## 7ZIP ########################################################################
 
 command:7zip "BINARY=7z 7zcat test.7z" "Test basic archive unpacking"
@@ -47,6 +52,24 @@ command "7zcat test.7z" "Test basic archive unpacking"
 command "7zcat -p {password} test-pswd.7z" "Test password-protected archive unpacking"
   expect "{data}"
   exit 0
+
+## ERRORS ######################################################################
+
+command "7zcat unknown.7z" "Test reading error (not exist)"
+  expect "▲ File unknown.7z doesn't exist"
+  !exit 0
+
+command "7zcat ../SOURCES" "Test reading error (not a file)"
+  expect "▲ ../SOURCES is not a file"
+  !exit 0
+
+command "7zcat /etc/shadow" "Test reading error (not readable)"
+  expect "▲ File /etc/shadow is not readable"
+  !exit 0
+
+command "7zcat test-broken.7z" "Test reading error (not readable)"
+  expect "▲ File test-broken.7z is not a 7z archive"
+  !exit 0
 
 command "7zcat -p WrOnG test-pswd.7z" "Test wrong password on password-protected archive unpacking"
   expect "▲ Wrong password"
