@@ -54,6 +54,9 @@ Examples
 
   7zcat -p test1234 protected-file.7z
   Show content of password protected file
+
+  7zcat file.7z | grep error
+  Filter content of file.7z
 ```
 
 ### Build Status
