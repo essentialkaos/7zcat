@@ -10,7 +10,7 @@ fi
 ########################################################################################
 
 APP="7zcat"
-VER="2.0.0"
+VER="2.0.1"
 
 ########################################################################################
 
@@ -47,8 +47,8 @@ CL_BL_GREY="\e[1;${GREY};49m"
 
 ########################################################################################
 
-SUPPORTED_OPTS="password !fast !no_colors !help !version"
-SHORT_OPTS="p:password F:!fast nc:!no_colors h:!help v:!version"
+SUPPORTED_OPTS="password !fast !no_color !help !version"
+SHORT_OPTS="p:password F:!fast nc:!no_color h:!help v:!version"
 
 ########################################################################################
 
@@ -61,11 +61,11 @@ options="-so -bd"
 ########################################################################################
 
 main() {
-  if [[ ! -t 1 || -n "$no_colors" || -n "$NO_COLOR" ]] ; then
+  if [[ ! -t 1 || -n "$no_color" || -n "$NO_COLOR" ]] ; then
     unset NORM BOLD UNLN RED GREEN YELLOW BLUE MAG CYAN GREY DARK
     unset CL_NORM CL_BOLD CL_UNLN CL_RED CL_GREEN CL_YELLOW CL_BLUE CL_MAG CL_CYAN CL_GREY CL_DARK
     unset CL_BL_RED CL_BL_GREEN CL_BL_YELLOW CL_BL_BLUE CL_BL_MAG CL_BL_CYAN CL_BL_GREY CL_BL_DARK
-    no_colors=true
+    no_color=true
   fi
 
   if [[ -n "$version" ]] ; then
@@ -286,7 +286,7 @@ maskPassword() {
 
 ########################################################################################
 
-# Show message
+# Print message
 #
 # 1: Message (String)
 # 2: Message color (Number) [Optional]
@@ -294,14 +294,14 @@ maskPassword() {
 # Code: No
 # Echo: No
 show() {
-  if [[ -n "$2" && -z "$no_colors" ]] ; then
+  if [[ -n "$2" && -z "$no_color" ]] ; then
     echo -e "\e[${2}m${1}\e[0m"
   else
     echo -e "$*"
   fi
 }
 
-# Show formated message with option info
+# Print formated message with option info
 #
 # 1: Option (String)
 # 2: Description (String)
@@ -344,7 +344,7 @@ error() {
   show "▲ $*" $RED 1>&2
 }
 
-# Shows warning message
+# Print warning message
 #
 # 1: Message (String)
 #
@@ -377,6 +377,9 @@ usage() {
   show ""
   show "  7zcat -p test1234 protected-file.7z"
   show "  Show content of password protected file" $DARK
+  show ""
+  show "  7zcat file.7z | grep error"
+  show "  Filter content of file.7z" $DARK
   show ""
 }
 

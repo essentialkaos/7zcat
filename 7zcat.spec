@@ -2,7 +2,7 @@
 
 Summary:    Utility for uncompressing data from 7z archive to stdout
 Name:       7zcat
-Version:    2.0.0
+Version:    2.0.1
 Release:    0%{?dist}
 Group:      Applications/System
 License:    Apache License, Version 2.0
@@ -44,6 +44,9 @@ rm -rf %{buildroot}
 ################################################################################
 
 %changelog
+* Wed Jan 25 2023 Anton Novojilov <andy@essentialkaos.com> - 2.0.1-0
+- Fixed --no-color option
+
 * Sun Jan 22 2023 Anton Novojilov <andy@essentialkaos.com> - 2.0.0-0
 - Code refactoring
 - Added 7zip support
