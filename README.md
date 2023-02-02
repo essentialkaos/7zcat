@@ -34,6 +34,14 @@ Also, you can use the latest version of utility without installation:
 bash <(curl -fsSL https://kaos.sh/7zcat/SOURCES/7zcat) # pass options and arguments here
 ```
 
+#### Using Makefile and Git
+
+```bash
+git clone https://kaos.sh/7zcat.git
+cd 7zcat
+sudo make install
+```
+
 ### Usage
 
 ```
