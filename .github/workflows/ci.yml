@@ -63,3 +63,14 @@ jobs:
         uses: essentialkaos/shellcheck-action@v1
         with:
           files: SOURCES/7zcat
+
+  Typos:
+    name: Typos
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Check spelling
+        uses: crate-ci/typos@master
