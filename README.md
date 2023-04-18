@@ -9,7 +9,7 @@
 
 <br/>
 
-`7zcat` is simple utility for uncompressing 7z files and writing uncompressed data to standart output.
+`7zcat` is simple utility for uncompressing 7z files and writing uncompressed data to standard output.
 
 ### Installation
 

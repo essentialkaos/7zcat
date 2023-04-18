@@ -301,7 +301,7 @@ show() {
   fi
 }
 
-# Print formated message with option info
+# Print formatted message with option info
 #
 # 1: Option (String)
 # 2: Description (String)

@@ -18,7 +18,7 @@ Provides:   %{name} = %{version}-%{release}
 ################################################################################
 
 %description
-Utility for uncompressing 7z files and writing uncompressed data to standart
+Utility for uncompressing 7z files and writing uncompressed data to standard
 output.
 
 ################################################################################
