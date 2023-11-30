@@ -19,7 +19,7 @@ jobs:
         run: 7za -h
 
       - name: Checkout source code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Run test recipes with Bibop
         uses: essentialkaos/bibop-action@v1
@@ -35,10 +35,10 @@ jobs:
 
     steps:
       - name: Code checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@v2
+        uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -57,9 +57,22 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Check scripts with Shellcheck
         uses: essentialkaos/shellcheck-action@v1
         with:
           files: SOURCES/7zcat
+
+  Typos:
+    name: Typos
+    runs-on: ubuntu-latest
+
+    needs: Bibop
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check spelling
+        uses: crate-ci/typos@master
