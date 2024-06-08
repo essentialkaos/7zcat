@@ -61,11 +61,11 @@
   <text x="12" y="216">  <tspan class="g">--version, -v</tspan> <tspan class="DG">............</tspan> Show information about version</text>
   <text x="12" y="256"><tspan class="bold">Examples</tspan></text>
   <text x="12" y="296">  7zcat file.7z</text>
-  <text x="12" y="316">  <tspan>Show content of file.7z</tspan></text>
+  <text x="12" y="316"><tspan class="DG">  Show content of file.7z</tspan></text>
   <text x="12" y="356">  7zcat -p test1234 protected-file.7z</text>
-  <text x="12" y="376">  <tspan>Show content of password protected file</tspan></text>
+  <text x="12" y="376"><tspan class="DG">  Show content of password protected file</tspan></text>
   <text x="12" y="416">  7zcat file.7z | grep error</text>
-  <text x="12" y="436">  <tspan>Filter content of file.7z</tspan></text>
+  <text x="12" y="436"><tspan class="DG">  Filter content of file.7z</tspan></text>
 
   <rect x="800" y="30" width="30.3" height="418" fill="url(#fog)"/>
 </svg>
