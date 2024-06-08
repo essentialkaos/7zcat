@@ -44,28 +44,7 @@ sudo make install
 
 ### Usage
 
-```
-Usage: 7zcat {options} file…
-
-Options
-
-  --password, -p password    Use password for unpacking archives
-  --fast, -F                 Use all CPUs for unpacking data
-  --no-color, -nc            Disable colors in output
-  --help, -h                 Show this help message
-  --version, -v              Show information about version
-
-Examples
-
-  7zcat file.7z
-  Show content of file.7z
-
-  7zcat -p test1234 protected-file.7z
-  Show content of password protected file
-
-  7zcat file.7z | grep error
-  Filter content of file.7z
-```
+<img src=".github/images/usage.svg" />
 
 ### Build Status
 
