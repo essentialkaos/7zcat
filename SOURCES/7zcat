@@ -379,13 +379,13 @@ usage() {
   show "Examples" $BOLD
   show ""
   show "  7zcat file.7z"
-  show "  ${CL_IT_DARK}Show content of file.7z${CL_NORM}"
+  show "  Show content of file.7z" $DARK
   show ""
   show "  7zcat -p test1234 protected-file.7z"
-  show "  ${CL_IT_DARK}Show content of password protected file${CL_NORM}"
+  show "  Show content of password protected file" $DARK
   show ""
   show "  7zcat file.7z | grep error"
-  show "  ${CL_IT_DARK}Filter content of file.7z${CL_NORM}"
+  show "  Filter content of file.7z" $DARK
   show ""
 }
 
