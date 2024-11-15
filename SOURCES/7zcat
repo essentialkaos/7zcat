@@ -10,7 +10,7 @@ fi
 ########################################################################################
 
 APP="7zcat"
-VER="2.1.1"
+VER="2.1.2"
 
 ########################################################################################
 
@@ -203,22 +203,22 @@ checkFile() {
   local file="$1"
 
   if [[ ! -e "$file" ]] ; then
-    error "File ${CL_BL_RED}${file}${CL_RED} doesn't exist"
+    error "File \"${file}\" doesn't exist"
     return 1
   fi
 
   if [[ ! -f "$file" ]] ; then
-    error "${CL_BL_RED}${file}${CL_RED} is not a file"
+    error "\"${file}\" is not a file"
     return 1
   fi
 
   if [[ ! -r "$file" ]] ; then
-    error "File ${CL_BL_RED}${file}${CL_RED} is not readable"
+    error "File \"${file}\" is not readable"
     return 1
   fi
 
   if ! is7zArch "$file" ; then
-    error "File ${CL_BL_RED}${file}${CL_RED} is not a 7z archive"
+    error "File \"${file}\" is not a 7z archive"
     return 1
   fi
 
